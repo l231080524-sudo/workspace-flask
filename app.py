@@ -619,4 +619,8 @@ def create_app():
 app = create_app()  # <--- Así Gunicorn puede encontrarla
 
 if __name__ == "__main__":
+
     app.run(debug=True)
+
+    app.run(debug=True)
+
