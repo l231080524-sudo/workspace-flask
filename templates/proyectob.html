@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Proyectos | WORKSPACE</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    
+    /* Fondo Boss */
+    body { background: #fffbeb; color: #1f2937; }
+
+    /* NAVBAR BOSS */
+    nav {
+      background: #ffffff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      border-bottom: 3px solid #ffb703;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand { color: #ffb703; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
+    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-menu a { color: #4b5563; text-decoration: none; font-weight: 500; transition: 0.3s; }
+    .nav-menu a:hover { color: #ffb703; }
+    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
+    .btn-logout:hover { background: #dc2626; }
+
+    /* CONTENEDOR */
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 20px;
+    }
+    .page-header h1 { font-size: 2rem; color: #1f2937; font-weight: 700; }
+    
+    .btn-create {
+      background: #ffb703;
+      color: #1f2937;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-create:hover { background: #fb8500; color: white; transform: translateY(-2px); }
+
+    /* GRID DE PROYECTOS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .project-card {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-left: 5px solid #ffb703;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
+    }
+
+    .card-header h3 {
+      font-size: 1.3rem;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .card-date {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .card-desc {
+      color: #4b5563;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .card-stats {
+      background: #fffbeb;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+      color: #d97706;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .btn-manage {
+      width: 100%;
+      padding: 10px;
+      background: white;
+      border: 2px solid #ffb703;
+      color: #d97706;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: 0.3s;
+      display: block;
+    }
+
+    .btn-manage:hover {
+      background: #ffb703;
+      color: white;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 60px;
+      background: white;
+      border-radius: 20px;
+      color: #9ca3af;
+    }
+    .empty-icon { font-size: 4rem; display: block; margin-bottom: 15px; opacity: 0.5; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #9ca3af;
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      .page-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+      .btn-create { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR BOSS -->
+  <nav>
+    <a href="{{ url_for('perfilb') }}" class="nav-brand">WORKSPACE.</a>
+    <ul class="nav-menu">
+      <li><a href="{{ url_for('perfilb') }}">Mi Perfil</a></li>
+      <li><a href="{{ url_for('proyectob') }}">Mis Proyectos</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    
+    <div class="page-header">
+      <h1>Mis Proyectos</h1>
+      <a href="{{ url_for('crearproyecto') }}" class="btn-create">
+        <span>+</span> Nuevo Proyecto
+      </a>
+    </div>
+
+    {% if proyectos %}
+      <div class="projects-grid">
+        {% for p in proyectos %}
+          <div class="project-card">
+            
+            <div class="card-header">
+              <h3>{{ p.titulo }}</h3>
+              <span class="card-date">📅 Publicado: {{ p.fecha_limite }}</span>
+            </div>
+
+            <p class="card-desc">{{ p.descripcion }}</p>
+
+            <div class="card-stats">
+              👥 {{ p.postulaciones }} Postulaciones
+            </div>
+
+            <a href="{{ url_for('detallesolicitud', id=p.id) }}" class="btn-manage">
+              Gestionar Candidatos →
+            </a>
+
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <!-- ESTO es lo que ves si no hay proyectos -->
+      <div class="empty-state">
+        <span class="empty-icon">📁</span>
+        <h3>Aún no has publicado proyectos.</h3>
+        <p>Crea tu primera oferta para empezar a recibir talento.</p>
+        <a href="{{ url_for('crearproyecto') }}" style="color: #d97706; font-weight: 600; text-decoration: none; margin-top: 15px; display: inline-block;">Crear Proyecto Ahora</a>
+      </div>
+    {% endif %}
+
+  </div>
+
+  <footer>
+    <p>© 2025 WORKSPACE - Panel de Control.</p>
+  </footer>
+
+</body>
+</html>

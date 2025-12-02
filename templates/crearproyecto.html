@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publicar Proyecto | WORKSPACE</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    
+    body { background: #fffbeb; color: #1f2937; } /* Fondo cálido para el Boss */
+
+    /* NAVBAR BOSS */
+    nav {
+      background: #ffffff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      border-bottom: 3px solid #ffb703;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand { color: #ffb703; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
+    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-menu a { color: #4b5563; text-decoration: none; font-weight: 500; transition: 0.3s; }
+    .nav-menu a:hover { color: #ffb703; }
+    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
+    .btn-logout:hover { background: #dc2626; }
+
+    /* CONTENEDOR PRINCIPAL */
+    .main-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* ENCABEZADO */
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-header h1 {
+      font-size: 2.2rem;
+      color: #1f2937;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .page-header p {
+      color: #6b7280;
+      font-size: 1.1rem;
+    }
+
+    /* TARJETA DEL FORMULARIO */
+    .form-card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+      border-top: 6px solid #ffb703;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .form-group input, 
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s;
+      outline: none;
+      background-color: #f9fafb;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #ffb703;
+      background-color: white;
+      box-shadow: 0 0 0 4px rgba(255, 183, 3, 0.15);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 150px;
+    }
+
+    /* Layout en 2 columnas para campos cortos */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* BOTÓN DE ACCIÓN */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #ffb703, #fb8500);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(251, 133, 0, 0.4);
+    }
+
+    .btn-cancel {
+      display: block;
+      text-align: center;
+      margin-top: 25px;
+      color: #6b7280;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+    .btn-cancel:hover { color: #374151; text-decoration: underline; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #9ca3af;
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .form-card { padding: 25px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR BOSS -->
+  <nav>
+    <a href="{{ url_for('perfilb') }}" class="nav-brand">WORKSPACE.</a>
+    <ul class="nav-menu">
+      <li><a href="{{ url_for('perfilb') }}">Mi Perfil</a></li>
+      <li><a href="{{ url_for('proyectob') }}">Mis Proyectos</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-container">
+    
+    <div class="page-header">
+      <h1>Publicar Nuevo Proyecto</h1>
+      <p>Define los detalles de tu oferta para encontrar al talento ideal.</p>
+    </div>
+
+    <div class="form-card">
+      <form action="{{ url_for('crearproyecto') }}" method="POST">
+        
+        <!-- Título -->
+        <div class="form-group">
+          <label for="titulo">Título del Proyecto</label>
+          <input type="text" id="titulo" name="titulo" placeholder="Ej. Rediseño de sitio web, App móvil..." required>
+        </div>
+
+        <!-- Descripción -->
+        <div class="form-group">
+          <label for="descripcion">Descripción Detallada</label>
+          <textarea id="descripcion" name="descripcion" placeholder="Describe los objetivos, requisitos técnicos y entregables..." required></textarea>
+        </div>
+
+        <!-- Fila de 2 columnas -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="categoria">Ubicación / Modalidad</label>
+            <input type="text" id="categoria" name="ubicacion" placeholder="Ej. Remoto, Híbrido, CDMX" required>
+          </div>
+
+          <div class="form-group">
+            <label for="presupuesto">Presupuesto (USD)</label>
+            <input type="number" id="presupuesto" name="presupuesto" placeholder="Ej. 1500.00" step="0.01" min="0" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          🚀 Publicar Proyecto
+        </button>
+      </form>
+
+      <a href="{{ url_for('perfilb') }}" class="btn-cancel">Cancelar y volver al perfil</a>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2025 WORKSPACE - Creando oportunidades.</p>
+  </footer>
+
+</body>
+</html>

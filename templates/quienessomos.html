@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiénes Somos | WORKSPACE</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Variables idénticas al Index para consistencia */
+    :root {
+      --primary: #ff7b00;
+      --primary-dark: #e66a00;
+      --secondary: #007bff;
+      --dark: #333;
+      --light: #f4f6f9;
+      --white: #ffffff;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* --- HEADER (Copiado del Index) --- */
+    header.menu {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 15px 50px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo a {
+      color: var(--primary);
+      font-size: 1.8em;
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -1px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      font-size: 1em;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Botones del menú */
+    .btn-login, .btn-registro {
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      transition: transform 0.3s !important;
+    }
+
+    .btn-login {
+      border: 2px solid var(--primary);
+      color: var(--primary) !important;
+    }
+
+    .btn-login:hover {
+      background: var(--primary);
+      color: var(--white) !important;
+    }
+
+    .btn-registro {
+      background: var(--primary);
+      color: var(--white) !important;
+      box-shadow: 0 4px 10px rgba(255, 123, 0, 0.3);
+    }
+
+    .btn-registro:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* --- HERO SECTION --- */
+    .hero-about {
+      text-align: center;
+      padding: 160px 20px 80px;
+      background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
+    }
+
+    .hero-about h1 {
+      font-size: 3em;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
+
+    .hero-about span {
+      color: var(--primary);
+    }
+
+    .hero-subtitle {
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.2em;
+      color: #666;
+    }
+
+    /* --- CONTENT SECTION --- */
+    .about-content {
+      max-width: 1100px;
+      margin: 0 auto 80px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+    }
+
+    .info-card {
+      background: var(--white);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+      border-top: 5px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .icon-large {
+      font-size: 3em;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .info-card h3 {
+      font-size: 1.5em;
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+
+    .info-card p {
+      color: #555;
+      font-size: 1.05em;
+      line-height: 1.7;
+    }
+
+    /* --- CTA SECTION --- */
+    .cta-section {
+      padding: 80px 20px;
+      text-align: center;
+      background: var(--dark);
+      color: var(--white);
+    }
+
+    .cta-section h2 {
+      margin-bottom: 30px;
+      font-size: 2em;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .button-big {
+      padding: 15px 40px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 5px 15px rgba(255, 123, 0, 0.4);
+    }
+
+    .btn-primary:hover {
+      background: var(--white);
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .btn-outline {
+      border: 2px solid var(--white);
+      color: var(--white);
+    }
+
+    .btn-outline:hover {
+      background: var(--white);
+      color: var(--dark);
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      background-color: #222;
+      color: #aaa;
+      text-align: center;
+      padding: 30px;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-about h1 { font-size: 2.5em; }
+      .action-buttons { flex-direction: column; align-items: center; }
+      .button-big { width: 100%; max-width: 300px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="menu">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="{{ url_for('index') }}">WORKSPACE.</a>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="{{ url_for('quienessomos') }}">Quiénes Somos</a></li>
+        <li><a href="{{ url_for('porque') }}">Por qué elegirnos</a></li>
+        <li><a href="{{ url_for('login') }}" class="btn-login">Login</a></li>
+        <li><a href="{{ url_for('registroa') }}" class="btn-registro">Registro</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-about">
+    <h1>¿Quiénes <span class="resaltado">Somos?</span></h1>
+    <p class="hero-subtitle">Conectando talento con oportunidades en un entorno digital moderno y colaborativo.</p>
+  </section>
+
+  <!-- Content Section (Convertido en Tarjetas) -->
+  <section class="about-content">
+    
+    <div class="info-card">
+      <span class="icon-large">🎯</span>
+      <h3>Nuestra Misión</h3>
+      <p>
+        <strong>WORKSPACE</strong> nació con la misión de conectar personas talentosas y facilitar la colaboración profesional
+        en un entorno digital moderno y accesible. Creemos que cada individuo tiene algo único que ofrecer, y nuestra
+        plataforma fue creada para ayudarte a mostrarlo al mundo.
+      </p>
+    </div>
+
+    <div class="info-card">
+      <span class="icon-large">🚀</span>
+      <h3>Nuestra Visión</h3>
+      <p>
+        Nuestro objetivo es crear un espacio donde la tecnología impulse el trabajo en equipo, la innovación y el crecimiento personal. 
+        Nos inspiramos en la necesidad de unir talento con oportunidad, y en la idea de que las grandes cosas nacen cuando las personas trabajan juntas.
+      </p>
+    </div>
+
+    <div class="info-card">
+      <span class="icon-large">👥</span>
+      <h3>Nuestro Origen</h3>
+      <p>
+        El proyecto fue desarrollado por un equipo de estudiantes y profesionales apasionados por la tecnología, 
+        el diseño y la colaboración digital. <strong>WORKSPACE</strong> es más que una plataforma: es una comunidad en constante crecimiento.
+      </p>
+    </div>
+
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta-section">
+    <h2>Únete a nuestra comunidad hoy mismo</h2>
+    <div class="action-buttons">
+      <a href="{{ url_for('registroa') }}" class="button-big btn-primary">Registrarse</a>
+      <a href="{{ url_for('login') }}" class="button-big btn-outline">Iniciar Sesión</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 WORKSPACE - Inspirando Colaboración.</p>
+  </footer>
+
+</body>
+</html>

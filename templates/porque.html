@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Por qué elegirnos | WORKSPACE</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Variables de diseño unificadas */
+    :root {
+      --primary: #ff7b00;
+      --primary-dark: #e66a00;
+      --secondary: #007bff;
+      --dark: #333;
+      --light: #f4f6f9;
+      --white: #ffffff;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* --- HEADER --- */
+    header.menu {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 15px 50px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo a {
+      color: var(--primary);
+      font-size: 1.8em;
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -1px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      font-size: 1em;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Botones del menú */
+    .btn-login, .btn-registro {
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      transition: transform 0.3s !important;
+    }
+
+    .btn-login {
+      border: 2px solid var(--primary);
+      color: var(--primary) !important;
+    }
+
+    .btn-login:hover {
+      background: var(--primary);
+      color: var(--white) !important;
+    }
+
+    .btn-registro {
+      background: var(--primary);
+      color: var(--white) !important;
+      box-shadow: 0 4px 10px rgba(255, 123, 0, 0.3);
+    }
+
+    .btn-registro:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* --- HERO SECTION --- */
+    .hero-why {
+      text-align: center;
+      padding: 160px 20px 80px;
+      background: linear-gradient(135deg, #fff8e1 0%, #ffffff 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
+    }
+
+    .hero-why h1 {
+      font-size: 3em;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
+
+    .hero-why span {
+      color: var(--primary);
+      position: relative;
+    }
+    
+    .hero-why span::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 8px;
+      bottom: 5px;
+      left: 0;
+      background-color: rgba(255, 123, 0, 0.2);
+      z-index: -1;
+    }
+
+    .hero-subtitle {
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.2em;
+      color: #666;
+    }
+
+    /* --- REASONS GRID --- */
+    .reasons-section {
+      max-width: 1100px;
+      margin: 0 auto 80px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+    }
+
+    .reason-card {
+      background: var(--white);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+      border-bottom: 5px solid var(--primary);
+      text-align: left;
+    }
+
+    .reason-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .icon-box {
+      width: 60px;
+      height: 60px;
+      background: #fff3e0;
+      color: var(--primary);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    .reason-card h3 {
+      font-size: 1.4em;
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+
+    .reason-card p {
+      color: #555;
+      font-size: 1em;
+      line-height: 1.7;
+    }
+
+    /* --- CTA SECTION --- */
+    .cta-section {
+      padding: 80px 20px;
+      text-align: center;
+      background: var(--dark);
+      color: var(--white);
+    }
+
+    .cta-section h2 {
+      margin-bottom: 30px;
+      font-size: 2em;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .button-big {
+      padding: 15px 40px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 5px 15px rgba(255, 123, 0, 0.4);
+    }
+
+    .btn-primary:hover {
+      background: var(--white);
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .btn-outline {
+      border: 2px solid var(--white);
+      color: var(--white);
+    }
+
+    .btn-outline:hover {
+      background: var(--white);
+      color: var(--dark);
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      background-color: #222;
+      color: #aaa;
+      text-align: center;
+      padding: 30px;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-why h1 { font-size: 2.5em; }
+      .action-buttons { flex-direction: column; align-items: center; }
+      .button-big { width: 100%; max-width: 300px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="menu">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="{{ url_for('index') }}">WORKSPACE.</a>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="{{ url_for('quienessomos') }}">Quiénes Somos</a></li>
+        <li><a href="{{ url_for('porque') }}">Por qué elegirnos</a></li>
+        <li><a href="{{ url_for('login') }}" class="btn-login">Login</a></li>
+        <li><a href="{{ url_for('registroa') }}" class="btn-registro">Registro</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-why">
+    <h1>¿Por qué elegir <span class="resaltado">WORKSPACE?</span></h1>
+    <p class="hero-subtitle">Descubre las ventajas que nos convierten en la mejor opción para potenciar tu carrera profesional.</p>
+  </section>
+
+  <!-- Reasons Grid -->
+  <section class="reasons-section">
+    
+    <div class="reason-card">
+      <div class="icon-box">⚡</div>
+      <h3>Productividad Máxima</h3>
+      <p>
+        WORKSPACE está diseñado para optimizar tu flujo de trabajo. Ofrecemos herramientas intuitivas que permiten gestionar proyectos, conectarse con otros usuarios y comunicarse de manera eficiente, eliminando pérdidas de tiempo.
+      </p>
+    </div>
+
+    <div class="reason-card">
+      <div class="icon-box">🛡️</div>
+      <h3>Espacio Seguro</h3>
+      <p>
+        Nuestro enfoque es simple: crear un entorno confiable y flexible. Aquí puedes ofrecer tus habilidades o encontrar oportunidades de negocio con la tranquilidad de estar en una plataforma que valora la seguridad.
+      </p>
+    </div>
+
+    <div class="reason-card">
+      <div class="icon-box">💎</div>
+      <h3>Todo en Uno</h3>
+      <p>
+        Olvídate de usar múltiples apps. Con WORKSPACE accedes a una plataforma moderna con funciones pensadas para el ciclo completo: desde la publicación de la oferta hasta la entrega final del proyecto.
+      </p>
+    </div>
+
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta-section">
+    <h2>Empieza a construir tu futuro hoy</h2>
+    <div class="action-buttons">
+      <a href="{{ url_for('login') }}" class="button-big btn-outline">Iniciar Sesión</a>
+      <a href="{{ url_for('registroa') }}" class="button-big btn-primary">Registrarse</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 WORKSPACE - Inspirando Colaboración.</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscar Proyectos | WORKSPACE</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #f0f4f8; color: #1e293b; }
+
+    /* NAVBAR CONSISTENTE (WORKER) */
+    nav {
+      background: #ffffff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      border-bottom: 3px solid #2563eb;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand { color: #2563eb; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
+    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-menu a { color: #64748b; text-decoration: none; font-weight: 500; transition: 0.3s; }
+    .nav-menu a:hover { color: #2563eb; }
+    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
+    .btn-logout:hover { background: #dc2626; }
+
+    /* CONTENEDOR PRINCIPAL */
+    .main-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: #1e293b;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .page-header p {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+
+    /* ALERTAS FLASH (NUEVO) */
+    .alert-container {
+      margin-bottom: 30px;
+    }
+    .alert {
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .alert-success { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+    .alert-danger { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .alert-warning { background-color: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+    .alert-info { background-color: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+
+    /* GRID DE PROYECTOS */
+    .proyectos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .proyecto-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .proyecto-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
+      border-color: #2563eb;
+    }
+
+    /* Borde decorativo superior */
+    .proyecto-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+    }
+
+    .card-header { margin-bottom: 15px; }
+    
+    .proyecto-card h3 {
+      font-size: 1.4rem;
+      color: #1e293b;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .badge-date {
+      display: inline-block;
+      background: #eff6ff;
+      color: #2563eb;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .card-body {
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      flex-grow: 1; /* Empuja el botón hacia abajo */
+    }
+
+    .btn-postular {
+      width: 100%;
+      padding: 12px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-postular:hover {
+      background: #1e40af;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    /* ESTADO VACÍO */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      color: #64748b;
+    }
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      display: block;
+      color: #cbd5e1;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      .page-header h1 { font-size: 2rem; }
+      .nav-menu { display: none; } /* En móvil podrías querer un menú hamburguesa */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR WORKER -->
+  <nav>
+    <a href="{{ url_for('perfilw') }}" class="nav-brand">WORKSPACE.</a>
+    <ul class="nav-menu">
+      <li><a href="{{ url_for('perfilw') }}">Mi Perfil</a></li>
+      <li><a href="{{ url_for('proyectow') }}">Buscar Proyectos</a></li>
+      <li><a href="{{ url_for('trabajospendientes') }}">Trabajos Pendientes</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-container">
+    
+    <!-- BLOQUE DE MENSAJES FLASH (AQUÍ APARECERÁ EL ÉXITO) -->
+    <div class="alert-container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="page-header">
+      <h1>Explora Oportunidades</h1>
+      <p>Encuentra el proyecto perfecto para demostrar tus habilidades.</p>
+    </div>
+
+    {% if proyectos %}
+      <div class="proyectos-grid">
+        {% for p in proyectos %}
+          <div class="proyecto-card">
+            
+            <div class="card-header">
+              <span class="badge-date">📅 Límite: {{ p.fecha_limite }}</span>
+              <h3>{{ p.titulo }}</h3>
+            </div>
+
+            <div class="card-body">
+              <p>{{ p.descripcion }}</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('solicitudes') }}">
+              <input type="hidden" name="proyecto_id" value="{{ p.id }}">
+              <button class="btn-postular">
+                ✉️ Postularme Ahora
+              </button>
+            </form>
+
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span class="empty-icon">📭</span>
+        <h3>No hay proyectos disponibles por el momento</h3>
+        <p>Vuelve más tarde o revisa tus trabajos pendientes.</p>
+        <a href="{{ url_for('trabajospendientes') }}" style="color: #2563eb; font-weight: 600; margin-top: 10px; display: inline-block;">Ir a mis trabajos</a>
+      </div>
+    {% endif %}
+
+  </div>
+
+  <footer>
+    <p>© 2025 WORKSPACE - Tu plataforma de crecimiento.</p>
+  </footer>
+
+</body>
+</html>

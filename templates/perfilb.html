@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil Boss | WORKSPACE</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #f3f4f6; color: #1f2937; }
+
+    /* NAVBAR DASHBOARD */
+    nav {
+      background: #ffffff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      border-bottom: 3px solid #ffb703;
+    }
+    .nav-brand { color: #ffb703; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
+    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-menu a { color: #4b5563; text-decoration: none; font-weight: 500; transition: 0.3s; }
+    .nav-menu a:hover { color: #ffb703; }
+    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
+    .btn-logout:hover { background: #dc2626; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3); }
+
+    /* LAYOUT PRINCIPAL */
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 2rem;
+    }
+
+    /* TARJETA DE PERFIL (SIDEBAR) */
+    .profile-card {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 2rem;
+      border-top: 5px solid #ffb703;
+    }
+    
+    .avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 4px solid #ffb703;
+      margin-bottom: 1rem;
+      object-fit: cover;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .profile-card h2 { color: #1f2937; font-size: 1.6rem; margin-bottom: 0.2rem; }
+    .profile-card .username { font-size: 0.9rem; color: #6b7280; margin-bottom: 1rem; display: block; }
+    
+    .role-badge { 
+      background: #fffbeb; 
+      color: #d97706; 
+      padding: 0.4rem 1.2rem; 
+      border-radius: 20px; 
+      font-size: 0.8rem; 
+      font-weight: 700; 
+      display: inline-block; 
+      margin-bottom: 2rem; 
+      letter-spacing: 1px;
+    }
+    
+    .profile-info { text-align: left; border-top: 1px solid #f3f4f6; padding-top: 1.5rem; }
+    .info-item { margin-bottom: 1.2rem; }
+    .info-label { font-size: 0.75rem; color: #9ca3af; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+    .info-value { font-size: 1rem; color: #374151; font-weight: 500; }
+
+    /* SECCIÓN PRINCIPAL (MAIN) */
+    .welcome-banner {
+      background: linear-gradient(135deg, #ffb703, #fb8500);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 20px;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 20px -5px rgba(251, 133, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .welcome-banner h1 { font-size: 2.2rem; margin-bottom: 0.5rem; position: relative; z-index: 2; }
+    .welcome-banner p { font-size: 1.1rem; opacity: 0.9; position: relative; z-index: 2; }
+    
+    /* Decoración de fondo */
+    .welcome-banner::after {
+      content: '⚡';
+      position: absolute;
+      right: 20px;
+      top: -20px;
+      font-size: 10rem;
+      opacity: 0.15;
+      transform: rotate(15deg);
+    }
+
+    .section-title { font-size: 1.4rem; color: #374151; margin-bottom: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+    
+    .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+    
+    .action-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      border: 1px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .action-card:hover { 
+      transform: translateY(-5px); 
+      border-color: #ffb703; 
+      box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1); 
+    }
+    
+    .icon-box { 
+      width: 55px; 
+      height: 55px; 
+      background: #fffbeb; 
+      color: #d97706; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      border-radius: 14px; 
+      font-size: 1.8rem; 
+      margin-bottom: 1.2rem; 
+      transition: 0.3s;
+    }
+    
+    .action-card:hover .icon-box { background: #ffb703; color: white; transform: rotate(5deg); }
+
+    .action-title { font-size: 1.2rem; font-weight: 700; color: #1f2937; margin-bottom: 0.5rem; }
+    .action-desc { font-size: 0.9rem; color: #6b7280; line-height: 1.5; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #9ca3af;
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-container { grid-template-columns: 1fr; }
+      .profile-card { position: static; margin-bottom: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="{{ url_for('index') }}" class="nav-brand">WORKSPACE.</a>
+    <ul class="nav-menu">
+      <li><a href="{{ url_for('index') }}">Inicio</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
+    </ul>
+  </nav>
+
+  <div class="dashboard-container">
+    
+    <!-- SIDEBAR: PERFIL -->
+    <aside class="profile-card">
+      <img src="{{ url_for('static', filename='img/perfil_default.png') }}" class="avatar" alt="Avatar">
+      <h2>{{ boss.nombre }}</h2>
+      <span class="username">@{{ boss.usuario }}</span>
+      <span class="role-badge">BOSS / CLIENTE</span>
+
+      <div class="profile-info">
+        <div class="info-item">
+          <div class="info-label">Empresa / Organización</div>
+          <div class="info-value">{{ boss.area or '—' }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Cargo</div>
+          <div class="info-value">{{ boss.descripcion or '—' }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Contacto</div>
+          <div class="info-value">{{ boss.correo }}</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN: DASHBOARD -->
+    <main>
+      <div class="welcome-banner">
+        <h1>¡Bienvenido, {{ boss.nombre.split()[0] }}! 👋</h1>
+        <p>¿Listo para liderar tu próximo gran proyecto?</p>
+      </div>
+
+      <div class="section-title">🚀 Panel de Gestión</div>
+
+      <div class="actions-grid">
+        
+        <!-- Acción 1: Crear Proyecto -->
+        <!-- VERIFICA: href apunta a 'crearproyecto' -->
+        <a href="{{ url_for('crearproyecto') }}" class="action-card">
+          <div class="icon-box">✨</div>
+          <div class="action-title">Crear Nuevo Proyecto</div>
+          <div class="action-desc">Publica una nueva oferta para encontrar talento. Define requisitos y presupuesto.</div>
+        </a>
+
+        <!-- Acción 2: Ver Mis Proyectos -->
+        <!-- VERIFICA: href apunta a 'proyectob' (ESTA ES LA CLAVE) -->
+        <a href="{{ url_for('proyectob') }}" class="action-card">
+          <div class="icon-box">📊</div>
+          <div class="action-title">Mis Proyectos</div>
+          <div class="action-desc">Administra tus ofertas activas, revisa postulaciones y selecciona candidatos.</div>
+        </a>
+
+        <!-- Acción 3: Editar Perfil -->
+        <a href="{{ url_for('perfilb') }}" class="action-card">
+          <div class="icon-box">⚙️</div>
+          <div class="action-title">Configuración</div>
+          <div class="action-desc">Actualiza los datos de tu empresa, información de contacto y preferencias.</div>
+        </a>
+      </div>
+    </main>
+
+  </div>
+
+  <footer>
+    <p>© 2025 WORKSPACE - Potenciando el talento global.</p>
+  </footer>
+
+</body>
+</html>

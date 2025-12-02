@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil Worker | WORKSPACE</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #f0f4f8; color: #1e293b; }
+
+    /* NAVBAR DASHBOARD */
+    nav {
+      background: #ffffff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      border-bottom: 3px solid #2563eb;
+    }
+    .nav-brand { color: #2563eb; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
+    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-menu a { color: #64748b; text-decoration: none; font-weight: 500; transition: 0.3s; }
+    .nav-menu a:hover { color: #2563eb; }
+    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
+    .btn-logout:hover { background: #dc2626; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3); }
+
+    /* LAYOUT PRINCIPAL */
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 2rem;
+    }
+
+    /* TARJETA DE PERFIL (SIDEBAR) */
+    .profile-card {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 2rem;
+      border-top: 5px solid #2563eb;
+    }
+    
+    .avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 4px solid #2563eb;
+      margin-bottom: 1rem;
+      object-fit: cover;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .profile-card h2 { color: #1e293b; font-size: 1.6rem; margin-bottom: 0.2rem; }
+    .profile-card .profesion { font-size: 1rem; color: #64748b; margin-bottom: 1rem; display: block; font-weight: 500; }
+    
+    .role-badge { 
+      background: #eff6ff; 
+      color: #2563eb; 
+      padding: 0.4rem 1.2rem; 
+      border-radius: 20px; 
+      font-size: 0.8rem; 
+      font-weight: 700; 
+      display: inline-block; 
+      margin-bottom: 2rem; 
+      letter-spacing: 1px;
+    }
+    
+    .profile-info { text-align: left; border-top: 1px solid #f1f5f9; padding-top: 1.5rem; }
+    .info-item { margin-bottom: 1.2rem; }
+    .info-label { font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+    .info-value { font-size: 1rem; color: #334155; font-weight: 500; }
+
+    /* SECCIÓN PRINCIPAL (MAIN) */
+    .welcome-banner {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 20px;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .welcome-banner h1 { font-size: 2.2rem; margin-bottom: 0.5rem; position: relative; z-index: 2; }
+    .welcome-banner p { font-size: 1.1rem; opacity: 0.9; position: relative; z-index: 2; }
+    
+    /* Decoración de fondo */
+    .welcome-banner::after {
+      content: '💼';
+      position: absolute;
+      right: 20px;
+      top: -20px;
+      font-size: 10rem;
+      opacity: 0.15;
+      transform: rotate(-15deg);
+    }
+
+    .section-title { font-size: 1.4rem; color: #334155; margin-bottom: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+    
+    .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+    
+    .action-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      border: 1px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .action-card:hover { 
+      transform: translateY(-5px); 
+      border-color: #2563eb; 
+      box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1); 
+    }
+    
+    .icon-box { 
+      width: 55px; 
+      height: 55px; 
+      background: #eff6ff; 
+      color: #2563eb; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      border-radius: 14px; 
+      font-size: 1.8rem; 
+      margin-bottom: 1.2rem; 
+      transition: 0.3s;
+    }
+    
+    .action-card:hover .icon-box { background: #2563eb; color: white; transform: rotate(-5deg); }
+
+    .action-title { font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem; }
+    .action-desc { font-size: 0.9rem; color: #64748b; line-height: 1.5; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-container { grid-template-columns: 1fr; }
+      .profile-card { position: static; margin-bottom: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="{{ url_for('index') }}" class="nav-brand">WORKSPACE.</a>
+    <ul class="nav-menu">
+      <li><a href="{{ url_for('index') }}">Inicio</a></li>
+      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
+    </ul>
+  </nav>
+
+  <div class="dashboard-container">
+    
+    <!-- SIDEBAR: PERFIL -->
+    <aside class="profile-card">
+      <img src="{{ url_for('static', filename='img/perfil_default.png') }}" class="avatar" alt="Avatar">
+      <h2>{{ worker.nombre }}</h2>
+      <span class="profesion">{{ worker.profesion or 'Profesional' }}</span>
+      <span class="role-badge">WORKER / FREELANCER</span>
+
+      <div class="profile-info">
+        <div class="info-item">
+          <div class="info-label">Ubicación</div>
+          <div class="info-value">{{ worker.ubicacion or 'Remoto' }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Sobre mí</div>
+          <div class="info-value" style="font-size: 0.95rem;">{{ worker.descripcion or 'Sin descripción' }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Contacto</div>
+          <div class="info-value">{{ worker.correo }}</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN: DASHBOARD -->
+    <main>
+      <div class="welcome-banner">
+        <h1>¡Hola, {{ worker.nombre.split()[0] }}! 👋</h1>
+        <p>¿Listo para encontrar tu próximo desafío?</p>
+      </div>
+
+      <div class="section-title">⚡ Acciones Rápidas</div>
+
+      <div class="actions-grid">
+        <!-- Acción 1: Buscar Proyectos -->
+        <a href="{{ url_for('proyectow') }}" class="action-card">
+          <div class="icon-box">🔍</div>
+          <div class="action-title">Buscar Proyectos</div>
+          <div class="action-desc">Explora el mercado de ofertas disponibles y postúlate a las que encajen con tu perfil.</div>
+        </a>
+
+        <!-- Acción 2: Mis Solicitudes -->
+        <a href="{{ url_for('solicitudes') }}" class="action-card">
+          <div class="icon-box">📂</div>
+          <div class="action-title">Mis Solicitudes</div>
+          <div class="action-desc">Revisa el estado de tus postulaciones enviadas (Pendiente, Aceptada o Rechazada).</div>
+        </a>
+
+        <!-- Acción 3: Trabajos Pendientes -->
+        <a href="{{ url_for('trabajospendientes') }}" class="action-card">
+          <div class="icon-box">🔨</div>
+          <div class="action-title">Trabajos Activos</div>
+          <div class="action-desc">Gestiona los proyectos donde has sido aceptado y marca los completados.</div>
+        </a>
+
+        <!-- Acción 4: Editar Perfil -->
+        <a href="{{ url_for('perfilw') }}" class="action-card">
+          <div class="icon-box">✏️</div>
+          <div class="action-title">Editar Perfil</div>
+          <div class="action-desc">Mantén tu información actualizada para atraer mejores oportunidades.</div>
+        </a>
+      </div>
+    </main>
+
+  </div>
+
+  <footer>
+    <p>© 2025 WORKSPACE - Tu plataforma de crecimiento.</p>
+  </footer>
+
+</body>
+</html>
