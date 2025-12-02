@@ -202,12 +202,20 @@ def create_app():
         return redirect(url_for("login"))
 
     # ----------------------
-    # LOGIN / LOGOUT
+    # LOGIN / LOGOUT (MODIFICADO)
     # ----------------------
     @app.route("/login", methods=["GET", "POST"])
     def login():
+        # Lógica de Redirección si ya está autenticado (NUEVO REQUISITO)
+        if current_user.is_authenticated:
+            if getattr(current_user, "user_type", None) == 'boss':
+                return redirect(url_for('perfilb')) # Boss a su perfil
+            elif getattr(current_user, "user_type", None) == 'employee':
+                return redirect(url_for('perfilw')) # Worker a su perfil
+            return redirect(url_for('index')) # Caso atípico
+
         if request.method == "GET":
-            # SIEMPRE renderiza el template login para que puedas verlo
+            # Si NO está autenticado, renderiza el template login
             return render_template("login.html")
 
         email = request.form.get("email", "").strip().lower()
@@ -227,18 +235,19 @@ def create_app():
 
         login_user(user)
         
-        # Redirección tras login
+        # Redirección tras login (Lógica original)
         if getattr(user, "user_type", None) == "boss":
             return redirect(url_for("perfilb"))
         else:
-            return redirect(url_for("perfilw"))
+            return redirect(url_for("proyectow")) # Worker redirige a la búsqueda de proyectos
 
     @app.route("/logout")
     @login_required
     def logout():
         logout_user()
         flash("Sesión cerrada.", "info")
-        return redirect(url_for("index"))
+        # Redirección al login (NUEVO REQUISITO)
+        return redirect(url_for("login")) 
 
     # ----------------------
     # RUTAS BOSS
@@ -270,17 +279,35 @@ def create_app():
             flash("Perfil Boss no encontrado.", "warning")
             return redirect(url_for("index"))
 
-        proyectos_q = JobOffer.query.filter_by(boss_id=boss_obj.boss_id).order_by(JobOffer.publish_date.desc()).all()
-        proyectos = []
-        for p in proyectos_q:
-            proyectos.append({
+        # Lógica de separación de proyectos (ACTUALIZADA)
+        all_jobs = JobOffer.query.filter_by(boss_id=boss_obj.boss_id).order_by(JobOffer.publish_date.desc()).all()
+
+        activos = []
+        finalizados = []
+
+        for p in all_jobs:
+            es_completado = False
+            if p.applications:
+                for app in p.applications:
+                    if app.status == 'completed':
+                        es_completado = True
+                        break
+            
+            datos_proyecto = {
                 "id": p.offer_id,
                 "titulo": p.title,
                 "descripcion": p.description,
                 "fecha_limite": p.publish_date.strftime('%Y-%m-%d'),
-                "postulaciones": len(p.applications) if getattr(p, 'applications', None) is not None else 0
-            })
-        return render_template("proyectob.html", proyectos=proyectos)
+                "postulaciones": len(p.applications) if p.applications else 0
+            }
+
+            if es_completado:
+                finalizados.append(datos_proyecto)
+            else:
+                activos.append(datos_proyecto)
+
+        # Enviamos DOS listas
+        return render_template("proyectob.html", activos=activos, finalizados=finalizados)
 
     @app.route("/crearproyecto", methods=["GET", "POST"])
     @login_required
@@ -371,6 +398,7 @@ def create_app():
 
         if accion == 'aceptar':
             application.status = 'accepted'
+            job.status = 'closed' # <--- CAMBIO: CERRAMOS LA OFERTA
             flash(f"Candidato aceptado. Ahora aparecerá en sus trabajos pendientes.", "success")
         elif accion == 'rechazar':
             application.status = 'rejected'
@@ -403,6 +431,7 @@ def create_app():
     @login_required
     @worker_required
     def proyectow():
+        # La oferta ya no aparecerá aquí si el status es 'closed' (al aceptar un candidato)
         proyectos_q = JobOffer.query.filter_by(status="open").order_by(JobOffer.publish_date.desc()).all()
         proyectos = []
         for p in proyectos_q:
@@ -459,8 +488,6 @@ def create_app():
                             "fecha": a.application_date.strftime('%Y-%m-%d')
                         })
                 # IMPORTANTE: Renderizamos el template NARANJA para Boss
-                # Puedes usar un archivo separado "solicitudes_boss.html" o el mismo "solicitudes.html" con un if.
-                # Aquí asumo que usas el mismo y le pasas la variable is_boss=True para que cambie el color en el HTML
                 return render_template("solicitudes.html", postulaciones=postulaciones, is_boss=True)
 
         # POST: Worker se postula
@@ -586,6 +613,10 @@ def create_app():
 
     return app
 
+# ==========================================
+# IMPORTANTE: ESTO VA AFUERA DEL IF
+# ==========================================
+app = create_app()  # <--- Así Gunicorn puede encontrarla
+
 if __name__ == "__main__":
-    app = create_app()
     app.run(debug=True)

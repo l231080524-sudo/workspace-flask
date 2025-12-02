@@ -63,6 +63,17 @@
     }
     .btn-create:hover { background: #fb8500; color: white; transform: translateY(-2px); }
 
+    /* SECCIONES */
+    .section-title {
+      font-size: 1.5rem;
+      color: #374151;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     /* GRID DE PROYECTOS */
     .projects-grid {
       display: grid;
@@ -80,7 +91,14 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border-left: 5px solid #ffb703;
+      border-left: 5px solid #ffb703; /* Naranja por defecto (Activos) */
+    }
+
+    /* Estilo para finalizados */
+    .card-finished {
+      border-left-color: #10b981; /* Verde */
+      background-color: #fdfdfd;
+      opacity: 0.95;
     }
 
     .project-card:hover {
@@ -120,6 +138,12 @@
       text-align: center;
     }
 
+    /* Cambio de color de stats en finalizados */
+    .card-finished .card-stats {
+      background: #ecfdf5;
+      color: #047857;
+    }
+
     .btn-manage {
       width: 100%;
       padding: 10px;
@@ -139,15 +163,26 @@
       color: white;
     }
 
+    /* Botón verde para finalizados */
+    .card-finished .btn-manage {
+      border-color: #10b981;
+      color: #059669;
+    }
+    .card-finished .btn-manage:hover {
+      background: #10b981;
+      color: white;
+    }
+
     /* EMPTY STATE */
     .empty-state {
       text-align: center;
-      padding: 60px;
+      padding: 40px;
       background: white;
       border-radius: 20px;
       color: #9ca3af;
+      border: 2px dashed #e5e7eb;
     }
-    .empty-icon { font-size: 4rem; display: block; margin-bottom: 15px; opacity: 0.5; }
+    .empty-icon { font-size: 3rem; display: block; margin-bottom: 10px; opacity: 0.5; }
 
     /* FOOTER */
     footer {
@@ -166,7 +201,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR BOSS -->
   <nav>
     <a href="{{ url_for('perfilb') }}" class="nav-brand">WORKSPACE.</a>
     <ul class="nav-menu">
@@ -185,36 +219,53 @@
       </a>
     </div>
 
-    {% if proyectos %}
+    <h2 class="section-title">⚡ En Progreso / Abiertos</h2>
+    {% if activos %}
       <div class="projects-grid">
-        {% for p in proyectos %}
+        {% for p in activos %}
           <div class="project-card">
-            
             <div class="card-header">
               <h3>{{ p.titulo }}</h3>
               <span class="card-date">📅 Publicado: {{ p.fecha_limite }}</span>
             </div>
-
             <p class="card-desc">{{ p.descripcion }}</p>
-
             <div class="card-stats">
               👥 {{ p.postulaciones }} Postulaciones
             </div>
-
             <a href="{{ url_for('detallesolicitud', id=p.id) }}" class="btn-manage">
               Gestionar Candidatos →
             </a>
-
           </div>
         {% endfor %}
       </div>
     {% else %}
-      <!-- ESTO es lo que ves si no hay proyectos -->
       <div class="empty-state">
-        <span class="empty-icon">📁</span>
-        <h3>Aún no has publicado proyectos.</h3>
-        <p>Crea tu primera oferta para empezar a recibir talento.</p>
-        <a href="{{ url_for('crearproyecto') }}" style="color: #d97706; font-weight: 600; text-decoration: none; margin-top: 15px; display: inline-block;">Crear Proyecto Ahora</a>
+        <p>No tienes proyectos activos actualmente.</p>
+      </div>
+    {% endif %}
+
+    <h2 class="section-title" style="margin-top: 60px;">✅ Historial Finalizado</h2>
+    {% if finalizados %}
+      <div class="projects-grid">
+        {% for p in finalizados %}
+          <div class="project-card card-finished">
+            <div class="card-header">
+              <h3>{{ p.titulo }}</h3>
+              <span class="card-date">🏁 Finalizado</span>
+            </div>
+            <p class="card-desc">{{ p.descripcion }}</p>
+            <div class="card-stats">
+              🎉 Trabajo Completado
+            </div>
+            <a href="{{ url_for('detallesolicitud', id=p.id) }}" class="btn-manage">
+              Ver Resumen
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <p>Aún no tienes proyectos finalizados.</p>
       </div>
     {% endif %}
 

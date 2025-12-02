@@ -1,6 +1,5 @@
 import os
 
-# Si usas .env, python-dotenv cargará las variables automáticamente en desarrollo.
 DATABASE_URL = os.environ.get("DATABASE_URL",
     "postgresql://postgres:HOLA@localhost:5432/paginaorquidea"
 )
