@@ -1,223 +1,298 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Publicar Proyecto | WORKSPACE</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicar Proyecto | WORKSPACE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    
-    body { background: #fffbeb; color: #1f2937; } /* Fondo cálido para el Boss */
+    <style>
+        :root {
+            --primary: #ff7b00; /* Naranja Boss */
+            --primary-dark: #e66a00;
+            --primary-light: #fff7ed;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+        }
 
-    /* NAVBAR BOSS */
-    nav {
-      background: #ffffff;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      border-bottom: 3px solid #ffb703;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .nav-brand { color: #ffb703; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
-    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-menu a { color: #4b5563; text-decoration: none; font-weight: 500; transition: 0.3s; }
-    .nav-menu a:hover { color: #ffb703; }
-    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
-    .btn-logout:hover { background: #dc2626; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-    /* CONTENEDOR PRINCIPAL */
-    .main-container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
 
-    /* ENCABEZADO */
-    .page-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .page-header h1 {
-      font-size: 2.2rem;
-      color: #1f2937;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    .page-header p {
-      color: #6b7280;
-      font-size: 1.1rem;
-    }
+        /* --- NAVBAR --- */
+        nav {
+            background: var(--white);
+            padding: 0 20px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
 
-    /* TARJETA DEL FORMULARIO */
-    .form-card {
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-      border-top: 6px solid #ffb703;
-    }
+        .nav-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .brand-icon {
+            background: var(--primary);
+            color: white;
+            padding: 5px;
+            border-radius: 6px;
+            display: flex;
+        }
 
-    .form-group {
-      margin-bottom: 25px;
-    }
+        .nav-menu { list-style: none; display: flex; gap: 25px; align-items: center; }
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary); }
 
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      color: #374151;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
+        .btn-logout {
+            color: #ef4444 !important;
+            font-weight: 600;
+        }
+        .btn-logout:hover { color: #dc2626 !important; }
 
-    .form-group input, 
-    .form-group textarea {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-family: inherit;
-      transition: all 0.3s;
-      outline: none;
-      background-color: #f9fafb;
-    }
+        .mobile-btn { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-gray); }
 
-    .form-group input:focus,
-    .form-group textarea:focus {
-      border-color: #ffb703;
-      background-color: white;
-      box-shadow: 0 0 0 4px rgba(255, 183, 3, 0.15);
-    }
+        /* --- CONTENEDOR --- */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    .form-group textarea {
-      resize: vertical;
-      min-height: 150px;
-    }
+        /* Header de Página */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .page-header h1 { font-size: 2rem; margin-bottom: 5px; color: var(--text-dark); }
+        .page-header p { color: var(--text-gray); font-size: 1.1rem; }
 
-    /* Layout en 2 columnas para campos cortos */
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
+        /* --- FORMULARIO --- */
+        .form-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
 
-    /* BOTÓN DE ACCIÓN */
-    .btn-submit {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #ffb703, #fb8500);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
+        .form-section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f5f9;
+        }
 
-    .btn-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px -5px rgba(251, 133, 0, 0.4);
-    }
+        .form-group { margin-bottom: 25px; }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
 
-    .btn-cancel {
-      display: block;
-      text-align: center;
-      margin-top: 25px;
-      color: #6b7280;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.95rem;
-      transition: 0.3s;
-    }
-    .btn-cancel:hover { color: #374151; text-decoration: underline; }
+        .input-wrapper { position: relative; }
 
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #9ca3af;
-      font-size: 0.9rem;
-      margin-top: 3rem;
-    }
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Ajuste para textarea que tiene el icono arriba */
+        .textarea-icon { top: 15px; transform: none; }
 
-    @media (max-width: 600px) {
-      .form-row { grid-template-columns: 1fr; }
-      .form-card { padding: 25px; }
-    }
-  </style>
+        .form-control {
+            width: 100%;
+            padding: 12px 15px 12px 45px; /* Espacio para icono */
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: 0.3s;
+            outline: none;
+            background: #f8fafc;
+            font-family: inherit;
+            color: var(--text-dark);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(255, 123, 0, 0.1);
+        }
+        
+        .form-control:focus + .input-icon { color: var(--primary); }
+
+        textarea.form-control { resize: vertical; min-height: 150px; }
+
+        /* Grid para campos cortos */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Botón Submit */
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(255, 123, 0, 0.2);
+            margin-top: 10px;
+        }
+        .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 123, 0, 0.3);
+        }
+
+        /* Botón Cancelar */
+        .btn-cancel {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        .btn-cancel:hover { color: var(--text-dark); text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .form-card { padding: 25px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .nav-menu { display: none; }
+            .mobile-btn { display: block; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- NAVBAR BOSS -->
-  <nav>
-    <a href="{{ url_for('perfilb') }}" class="nav-brand">WORKSPACE.</a>
-    <ul class="nav-menu">
-      <li><a href="{{ url_for('perfilb') }}">Mi Perfil</a></li>
-      <li><a href="{{ url_for('proyectob') }}">Mis Proyectos</a></li>
-      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
-    </ul>
-  </nav>
+    <!-- NAVBAR -->
+    <nav>
+        <a href="{{ url_for('perfilb') }}" class="nav-brand">
+            <div class="brand-icon"><i data-lucide="briefcase"></i></div>
+            <span>WORKSPACE.</span>
+        </a>
 
-  <div class="main-container">
-    
-    <div class="page-header">
-      <h1>Publicar Nuevo Proyecto</h1>
-      <p>Define los detalles de tu oferta para encontrar al talento ideal.</p>
-    </div>
+        <ul class="nav-menu">
+            <li><a href="{{ url_for('perfilb') }}"><i data-lucide="home" style="width: 18px;"></i> Inicio</a></li>
+            <li><a href="{{ url_for('proyectob') }}"><i data-lucide="folder-open" style="width: 18px;"></i> Mis Proyectos</a></li>
+            <li><a href="{{ url_for('logout') }}" class="btn-logout"><i data-lucide="log-out" style="width: 18px;"></i> Salir</a></li>
+        </ul>
 
-    <div class="form-card">
-      <form action="{{ url_for('crearproyecto') }}" method="POST">
+        <button class="mobile-btn"><i data-lucide="menu"></i></button>
+    </nav>
+
+    <div class="container">
         
-        <!-- Título -->
-        <div class="form-group">
-          <label for="titulo">Título del Proyecto</label>
-          <input type="text" id="titulo" name="titulo" placeholder="Ej. Rediseño de sitio web, App móvil..." required>
+        <div class="page-header">
+            <h1>Publicar Nuevo Proyecto</h1>
+            <p>Define los detalles de tu oferta para encontrar al talento ideal.</p>
         </div>
 
-        <!-- Descripción -->
-        <div class="form-group">
-          <label for="descripcion">Descripción Detallada</label>
-          <textarea id="descripcion" name="descripcion" placeholder="Describe los objetivos, requisitos técnicos y entregables..." required></textarea>
+        <div class="form-card">
+            
+            <div class="form-section-title">Información del Proyecto</div>
+
+            <form action="{{ url_for('crearproyecto') }}" method="POST">
+                
+                <div class="form-group">
+                    <label for="titulo">Título del Proyecto</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Ej. Rediseño de sitio web corporativo" required>
+                        <i data-lucide="type" class="input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción Detallada</label>
+                    <div class="input-wrapper">
+                        <textarea id="descripcion" name="descripcion" class="form-control" placeholder="Describe los objetivos, requisitos técnicos y entregables..." required></textarea>
+                        <i data-lucide="file-text" class="input-icon textarea-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="categoria">Ubicación / Modalidad</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="categoria" name="ubicacion" class="form-control" placeholder="Ej. Remoto, Híbrido" required>
+                            <i data-lucide="map-pin" class="input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="presupuesto">Presupuesto (USD)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="presupuesto" name="presupuesto" class="form-control" placeholder="Ej. 1500.00" step="0.01" min="0" required>
+                            <i data-lucide="dollar-sign" class="input-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i data-lucide="rocket" style="width: 20px;"></i> Publicar Proyecto
+                </button>
+            </form>
+
+            <a href="{{ url_for('perfilb') }}" class="btn-cancel">Cancelar y volver al perfil</a>
         </div>
 
-        <!-- Fila de 2 columnas -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="categoria">Ubicación / Modalidad</label>
-            <input type="text" id="categoria" name="ubicacion" placeholder="Ej. Remoto, Híbrido, CDMX" required>
-          </div>
-
-          <div class="form-group">
-            <label for="presupuesto">Presupuesto (USD)</label>
-            <input type="number" id="presupuesto" name="presupuesto" placeholder="Ej. 1500.00" step="0.01" min="0" required>
-          </div>
-        </div>
-
-        <button type="submit" class="btn-submit">
-          🚀 Publicar Proyecto
-        </button>
-      </form>
-
-      <a href="{{ url_for('perfilb') }}" class="btn-cancel">Cancelar y volver al perfil</a>
     </div>
 
-  </div>
-
-  <footer>
-    <p>© 2025 WORKSPACE - Creando oportunidades.</p>
-  </footer>
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 </html>

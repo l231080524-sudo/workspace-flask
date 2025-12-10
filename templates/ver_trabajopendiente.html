@@ -1,261 +1,331 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalles del Trabajo | WORKSPACE</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Trabajo | WORKSPACE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    
-    body { background: #f0f4f8; color: #1e293b; }
+    <style>
+        :root {
+            --primary: #2563eb; /* Azul Worker */
+            --primary-dark: #1e40af;
+            --primary-light: #eff6ff;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+            --green: #10b981;
+            --green-light: #dcfce7;
+            --green-text: #166534;
+        }
 
-    /* NAVBAR WORKER */
-    nav {
-      background: #ffffff;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      border-bottom: 3px solid #2563eb;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .nav-brand { color: #2563eb; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
-    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-menu a { color: #64748b; text-decoration: none; font-weight: 500; transition: 0.3s; }
-    .nav-menu a:hover { color: #2563eb; }
-    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
-    .btn-logout:hover { background: #dc2626; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-    /* CONTENEDOR */
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
 
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      color: #64748b;
-      text-decoration: none;
-      font-weight: 500;
-      margin-bottom: 20px;
-      transition: 0.3s;
-    }
-    .back-link:hover { color: #2563eb; transform: translateX(-5px); }
+        /* --- NAVBAR --- */
+        nav {
+            background: var(--white);
+            padding: 0 20px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
 
-    /* TARJETA PRINCIPAL */
-    .detail-card {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
-      overflow: hidden;
-      border-top: 6px solid #2563eb; /* Azul por defecto */
-    }
+        .nav-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .brand-icon {
+            background: var(--primary);
+            color: white;
+            padding: 5px;
+            border-radius: 6px;
+            display: flex;
+        }
 
-    .detail-header {
-      padding: 40px 40px 20px 40px;
-      border-bottom: 1px solid #f1f5f9;
-    }
+        .nav-menu { list-style: none; display: flex; gap: 25px; align-items: center; }
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary); }
 
-    .detail-header h1 {
-      font-size: 2rem;
-      color: #1e293b;
-      margin-bottom: 10px;
-    }
+        .btn-logout {
+            color: #ef4444 !important;
+            font-weight: 600;
+        }
+        .btn-logout:hover { color: #dc2626 !important; }
 
-    .client-info {
-      font-size: 1.1rem;
-      color: #64748b;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+        .mobile-btn { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-gray); }
 
-    .detail-body {
-      padding: 30px 40px;
-    }
+        /* --- CONTENEDOR --- */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .back-link:hover { color: var(--primary); transform: translateX(-5px); }
 
-    .info-item {
-      background: #f8fafc;
-      padding: 15px;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
-    }
-    .info-label { font-size: 0.85rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
-    .info-value { font-size: 1.1rem; color: #334155; font-weight: 600; }
+        /* --- TARJETA PRINCIPAL --- */
+        .detail-card {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border-top: 6px solid var(--primary); /* Azul por defecto */
+        }
 
-    .description-box {
-      margin-bottom: 30px;
-    }
-    .description-box h3 { font-size: 1.2rem; color: #1e293b; margin-bottom: 10px; }
-    .description-box p { color: #475569; line-height: 1.7; font-size: 1rem; }
+        .detail-header {
+            padding: 40px 40px 20px 40px;
+            border-bottom: 1px solid #f1f5f9;
+        }
 
-    /* ESTADO COMPLETADO */
-    .card-completed {
-      border-top-color: #10b981; /* Verde */
-    }
-    .card-completed .detail-header h1 { color: #065f46; }
-    
-    .status-badge {
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      margin-bottom: 15px;
-    }
-    .status-active { background: #eff6ff; color: #2563eb; }
-    .status-done { background: #dcfce7; color: #166534; }
+        .detail-header h1 {
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
 
-    /* ACCIONES */
-    .actions-footer {
-      padding: 20px 40px 40px 40px;
-      text-align: center;
-    }
+        .client-info {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    .btn-complete {
-      background: linear-gradient(135deg, #2563eb, #1e40af);
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
+        /* Estado Completado */
+        .card-completed { border-top-color: var(--green); }
+        .card-completed .detail-header h1 { color: var(--green-text); text-decoration: line-through; }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .status-active { background: var(--primary-light); color: var(--primary); }
+        .status-done { background: var(--green-light); color: var(--green-text); }
 
-    .btn-complete:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
-    }
+        .detail-body { padding: 30px 40px; }
 
-    .completion-message {
-      background: #f0fdf4;
-      color: #166534;
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid #bbf7d0;
-      font-weight: 600;
-      display: inline-block;
-    }
+        /* Grid de Info */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
 
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #94a3b8;
-      font-size: 0.9rem;
-      margin-top: 3rem;
-    }
+        .info-item {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        .info-label { font-size: 0.85rem; color: var(--text-gray); font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
+        .info-value { font-size: 1.2rem; color: var(--text-dark); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-    @media (max-width: 600px) {
-      .detail-header, .detail-body, .actions-footer { padding: 25px; }
-      .info-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+        .description-box h3 { font-size: 1.2rem; color: var(--text-dark); margin-bottom: 10px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; display: inline-block; }
+        .description-box p { color: var(--text-gray); line-height: 1.8; font-size: 1rem; white-space: pre-line; }
+
+        /* Footer Acciones */
+        .actions-footer {
+            padding: 30px 40px;
+            background: #f9fafb;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .btn-complete {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-complete:hover {
+            transform: translateY(-3px);
+            background: var(--primary-dark);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .completion-message {
+            background: var(--green-light);
+            color: var(--green-text);
+            padding: 15px 30px;
+            border-radius: 12px;
+            border: 1px solid #bbf7d0;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-btn { display: block; }
+            .detail-header, .detail-body, .actions-footer { padding: 25px; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- NAVBAR WORKER -->
-  <nav>
-    <a href="{{ url_for('perfilw') }}" class="nav-brand">WORKSPACE.</a>
-    <ul class="nav-menu">
-      <li><a href="{{ url_for('perfilw') }}">Mi Perfil</a></li>
-      <li><a href="{{ url_for('proyectow') }}">Buscar Proyectos</a></li>
-      <li><a href="{{ url_for('trabajospendientes') }}">Trabajos Pendientes</a></li>
-      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
-    </ul>
-  </nav>
+    <!-- NAVBAR -->
+    <nav>
+        <a href="{{ url_for('perfilw') }}" class="nav-brand">
+            <div class="brand-icon"><i data-lucide="briefcase"></i></div>
+            <span>WORKSPACE.</span>
+        </a>
 
-  <div class="container">
-    
-    <a href="{{ url_for('trabajospendientes') }}" class="back-link">← Volver a mis trabajos</a>
+        <ul class="nav-menu">
+            <li><a href="{{ url_for('perfilw') }}"><i data-lucide="user" style="width: 18px;"></i> Mi Perfil</a></li>
+            <li><a href="{{ url_for('proyectow') }}"><i data-lucide="search" style="width: 18px;"></i> Buscar Proyectos</a></li>
+            <li><a href="{{ url_for('trabajospendientes') }}"><i data-lucide="check-square" style="width: 18px;"></i> Mis Trabajos</a></li>
+            <li><a href="{{ url_for('logout') }}" class="btn-logout"><i data-lucide="log-out" style="width: 18px;"></i> Salir</a></li>
+        </ul>
 
-    <!-- TARJETA DE DETALLE -->
-    <!-- Clase dinámica: cambia borde a verde si está completado -->
-    <div class="detail-card {% if trabajo.estado == 'completed' %}card-completed{% endif %}">
-      
-      <div class="detail-header">
-        {% if trabajo.estado == 'completed' %}
-          <span class="status-badge status-done">✅ Finalizado</span>
-        {% else %}
-          <span class="status-badge status-active">⚡ En Progreso</span>
-        {% endif %}
+        <button class="mobile-btn"><i data-lucide="menu"></i></button>
+    </nav>
+
+    <div class="container">
         
-        <h1>{{ trabajo.titulo }}</h1>
-        <div class="client-info">
-          <span>Cliente: <strong>{{ trabajo.cliente }}</strong></span>
+        <a href="{{ url_for('trabajospendientes') }}" class="back-link">
+            <i data-lucide="arrow-left" style="width: 18px;"></i> Volver a mis trabajos
+        </a>
+
+        <!-- TARJETA DE DETALLE -->
+        <!-- Clase dinámica: cambia borde a verde si está completado -->
+        <div class="detail-card {% if trabajo.estado == 'completed' %}card-completed{% endif %}">
+            
+            <div class="detail-header">
+                {% if trabajo.estado == 'completed' %}
+                    <span class="status-badge status-done">
+                        <i data-lucide="check-circle" style="width: 16px;"></i> Finalizado
+                    </span>
+                {% else %}
+                    <span class="status-badge status-active">
+                        <i data-lucide="zap" style="width: 16px;"></i> En Progreso
+                    </span>
+                {% endif %}
+                
+                <h1>{{ trabajo.titulo }}</h1>
+                <div class="client-info">
+                    <i data-lucide="briefcase" style="width: 18px;"></i> Cliente: <strong>{{ trabajo.cliente }}</strong>
+                </div>
+            </div>
+
+            <div class="detail-body">
+                
+                <!-- Grid de Datos Clave -->
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Fecha de Entrega</div>
+                        <div class="info-value">
+                            <i data-lucide="calendar" style="width: 20px; color: var(--primary);"></i> 
+                            {{ trabajo.fecha_limite }}
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Pago Acordado</div>
+                        <div class="info-value" style="color: var(--green-text);">
+                            <i data-lucide="dollar-sign" style="width: 20px;"></i> 
+                            {{ trabajo.pago }}
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Estado Actual</div>
+                        <div class="info-value">
+                            {{ 'Completado' if trabajo.estado == 'completed' else 'Activo' }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="description-box">
+                    <h3>Descripción del Proyecto</h3>
+                    <p>{{ trabajo.descripcion }}</p>
+                </div>
+
+            </div>
+
+            <!-- Footer con Acciones -->
+            <div class="actions-footer">
+                {% if trabajo.estado != 'completed' %}
+                    <form method="POST" action="{{ url_for('marcar_completado') }}">
+                        <input type="hidden" name="id" value="{{ trabajo.id }}">
+                        <button class="btn-complete">
+                            <i data-lucide="check-square" style="width: 20px;"></i> Marcar como Completado
+                        </button>
+                    </form>
+                {% else %}
+                    <div class="completion-message">
+                        <i data-lucide="award" style="width: 24px;"></i>
+                        🎉 ¡Felicidades! Has completado este trabajo exitosamente.
+                    </div>
+                {% endif %}
+            </div>
+
         </div>
-      </div>
-
-      <div class="detail-body">
-        
-        <!-- Grid de Datos Clave -->
-        <div class="info-grid">
-          <div class="info-item">
-            <div class="info-label">Fecha de Entrega</div>
-            <div class="info-value">📅 {{ trabajo.fecha_limite }}</div>
-          </div>
-          <div class="info-item">
-            <div class="info-label">Pago Acordado</div>
-            <div class="info-value" style="color: #16a34a;">💰 ${{ trabajo.pago }}</div>
-          </div>
-          <div class="info-item">
-            <div class="info-label">Estado Actual</div>
-            <div class="info-value">{{ 'Completado' if trabajo.estado == 'completed' else 'Activo' }}</div>
-          </div>
-        </div>
-
-        <!-- Descripción -->
-        <div class="description-box">
-          <h3>Descripción del Proyecto</h3>
-          <p>{{ trabajo.descripcion }}</p>
-        </div>
-
-      </div>
-
-      <!-- Footer con Acciones -->
-      <div class="actions-footer">
-        {% if trabajo.estado != 'completed' %}
-          <form method="POST" action="{{ url_for('marcar_completado') }}">
-            <input type="hidden" name="id" value="{{ trabajo.id }}">
-            <button class="btn-complete">
-              🏁 Marcar como Completado
-            </button>
-          </form>
-        {% else %}
-          <div class="completion-message">
-            🎉 ¡Felicidades! Has completado este trabajo exitosamente.
-          </div>
-        {% endif %}
-      </div>
 
     </div>
 
-  </div>
-
-  <footer>
-    <p>© 2025 WORKSPACE - Tu historial de éxito.</p>
-  </footer>
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 </html>

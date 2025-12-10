@@ -1,204 +1,258 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro - Selección | WORKSPACE</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Perfil | WORKSPACE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-  <style>
-    /* Variables de diseño unificadas */
-    :root {
-      --primary: #ff7b00;
-      --primary-dark: #e66a00;
-      --secondary: #007bff;
-      --dark: #333;
-      --light: #f4f6f9;
-      --white: #ffffff;
-      --shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
+    <style>
+        :root {
+            --brand: #ff7b00; /* Naranja Boss */
+            --brand-dark: #e66a00;
+            --brand-light: #fff7ed;
+            
+            --blue: #2563eb; /* Azul Worker */
+            --blue-dark: #1e40af;
+            --blue-light: #eff6ff;
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
+            --text-dark: #1f2937;
+            --text-gray: #6b7280;
+            --bg-light: #f9fafb;
+            --white: #ffffff;
+        }
 
-    body {
-      background: linear-gradient(135deg, #fff8e1 0%, #f4f6f9 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-    .logo-login {
-      text-align: center;
-      margin-bottom: 50px;
-    }
+        body {
+            background-color: var(--bg-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-    .logo-login h1 a {
-      font-size: 3em;
-      font-weight: 800;
-      color: var(--primary);
-      text-decoration: none;
-      letter-spacing: -1px;
-    }
+        /* Fondo decorativo */
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .circle-1 { top: -100px; left: -100px; width: 400px; height: 400px; background: var(--blue-light); }
+        .circle-2 { bottom: -100px; right: -100px; width: 400px; height: 400px; background: var(--brand-light); }
 
-    .seleccion-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      width: 100%;
-      max-width: 900px;
-    }
+        /* Header Sección */
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+            max-width: 600px;
+        }
 
-    .box {
-      background: var(--white);
-      padding: 40px 30px;
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s;
-      position: relative;
-      overflow: hidden;
-      border: 2px solid transparent;
-    }
+        .logo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
 
-    .box:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
-    }
+        .logo-icon {
+            background: var(--brand);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    /* Estilos específicos WORKER */
-    .box.worker:hover {
-      border-color: var(--secondary);
-    }
-    .box.worker .icon {
-      background: #e3f2fd;
-      color: var(--secondary);
-    }
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
 
-    /* Estilos específicos BOSS */
-    .box.boss:hover {
-      border-color: var(--primary);
-    }
-    .box.boss .icon {
-      background: #fff3e0;
-      color: var(--primary);
-    }
+        .header-section h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
 
-    .icon {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      margin: 0 auto 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5em;
-    }
+        .header-section p {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+        }
 
-    .box h2 {
-      margin-bottom: 15px;
-      font-size: 1.8em;
-      font-weight: 700;
-      color: var(--dark);
-    }
+        /* Grid de Selección */
+        .selection-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            max-width: 900px;
+        }
 
-    .descripcion {
-      color: #666;
-      margin-bottom: 30px;
-      font-size: 1em;
-      line-height: 1.6;
-      min-height: 80px; /* Para alinear botones */
-    }
+        /* Tarjetas */
+        /* CAMBIO: Ahora .card se aplica a etiquetas <a>, quitamos decoracion de texto */
+        .card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            text-decoration: none; /* Importante para que no parezca un link gigante */
+            color: inherit;
+        }
 
-    .btn {
-      display: inline-block;
-      padding: 12px 30px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      color: var(--white);
-      transition: all 0.3s;
-      font-size: 1em;
-      width: 100%;
-    }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
 
-    .btn.worker {
-      background: var(--secondary);
-      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-    }
+        /* Icono flotante */
+        .card-icon-wrapper {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            transition: 0.3s;
+        }
 
-    .btn.worker:hover {
-      background: #0056b3;
-      transform: translateY(-2px);
-    }
+        .card h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 15px; color: var(--text-dark); }
+        .card p { color: var(--text-gray); font-size: 1rem; line-height: 1.6; margin-bottom: 30px; flex-grow: 1; }
 
-    .btn.boss {
-      background: var(--primary);
-      box-shadow: 0 4px 15px rgba(255, 123, 0, 0.3);
-    }
+        .btn-card {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
 
-    .btn.boss:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-    }
+        /* Estilos Específicos Worker (Azul) */
+        .card-worker { border-color: transparent; }
+        .card-worker:hover { border-color: var(--blue); }
+        
+        .card-worker .card-icon-wrapper { background: var(--blue-light); color: var(--blue); }
+        .card-worker:hover .card-icon-wrapper { transform: scale(1.1); background: var(--blue); color: white; }
 
-    .back-link {
-      margin-top: 40px;
-      color: #888;
-      text-decoration: none;
-      font-size: 0.9em;
-      transition: 0.3s;
-    }
-    .back-link:hover { color: var(--primary); }
+        .btn-worker { background: var(--blue); color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); }
+        .btn-worker:hover { background: var(--blue-dark); transform: translateY(-2px); }
 
-    @media (max-width: 768px) {
-      .seleccion-grid {
-        grid-template-columns: 1fr;
-      }
-      .logo-login h1 a { font-size: 2.5em; }
-    }
-  </style>
+        /* Estilos Específicos Boss (Naranja) */
+        .card-boss { border-color: transparent; }
+        .card-boss:hover { border-color: var(--brand); }
+
+        .card-boss .card-icon-wrapper { background: var(--brand-light); color: var(--brand); }
+        .card-boss:hover .card-icon-wrapper { transform: scale(1.1); background: var(--brand); color: white; }
+
+        .btn-boss { background: var(--brand); color: white; box-shadow: 0 4px 15px rgba(255, 123, 0, 0.2); }
+        .btn-boss:hover { background: var(--brand-dark); transform: translateY(-2px); }
+
+        /* Footer Link */
+        .login-footer { margin-top: 50px; text-align: center; }
+        .login-footer span { color: var(--text-gray); margin-right: 5px; }
+        .login-footer a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+        .login-footer a:hover { color: var(--brand); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .selection-grid { grid-template-columns: 1fr; }
+            .header-section h1 { font-size: 2rem; }
+            body { padding: 30px 20px; }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="logo-login">
-    <h1><a href="{{ url_for('index') }}">WORKSPACE.</a></h1>
-    <p style="color: #666; margin-top: 10px;">Elige cómo quieres unirte a nosotros</p>
-  </div>
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
 
-  <div class="seleccion-grid">
-
-    <!-- LADO WORKER -->
-    <div class="box worker">
-      <div class="icon">💼</div>
-      <h2>Soy Worker</h2>
-      <p class="descripcion">
-        Busco oportunidades laborales. Quiero ofrecer mis habilidades, postularme a proyectos y construir mi carrera profesional.
-      </p>
-      <a href="{{ url_for('registro') }}" class="btn worker">Crear cuenta Worker</a>
+    <div class="header-section">
+        <a href="{{ url_for('index') }}" class="logo-link">
+            <div class="logo-icon"><i data-lucide="briefcase" style="width: 20px;"></i></div>
+            <span class="brand-name">WORKSPACE.</span>
+        </a>
+        <h1>¿Cómo quieres unirte?</h1>
+        <p>Selecciona el perfil que mejor se adapte a tus objetivos profesionales.</p>
     </div>
 
-    <!-- LADO BOSS -->
-    <div class="box boss">
-      <div class="icon">🚀</div>
-      <h2>Soy Boss</h2>
-      <p class="descripcion">
-        Tengo un proyecto en mente. Busco talento profesional, quiero publicar ofertas y gestionar equipos de trabajo.
-      </p>
-      <a href="{{ url_for('registrob') }}" class="btn boss">Crear cuenta Boss</a>
+    <div class="selection-grid">
+        
+        <!-- Opción Worker: Ahora es un enlace <a> completo para evitar el onclick conflictivo -->
+        <a href="{{ url_for('registro') }}" class="card card-worker">
+            <div class="card-icon-wrapper">
+                <i data-lucide="briefcase" style="width: 40px; height: 40px;"></i>
+            </div>
+            <h2>Soy Worker</h2>
+            <p>Busco oportunidades laborales. Quiero ofrecer mis habilidades, postularme a proyectos y construir mi carrera profesional.</p>
+            <!-- Cambiamos el <a> interno por un <div> para evitar enlaces anidados ilegales -->
+            <div class="btn-card btn-worker">
+                Crear cuenta Worker <i data-lucide="arrow-right" style="width: 18px;"></i>
+            </div>
+        </a>
+
+        <!-- Opción Boss -->
+        <a href="{{ url_for('registrob') }}" class="card card-boss">
+            <div class="card-icon-wrapper">
+                <i data-lucide="rocket" style="width: 40px; height: 40px;"></i>
+            </div>
+            <h2>Soy Boss</h2>
+            <p>Tengo un proyecto en mente. Busco talento profesional, quiero publicar ofertas y gestionar equipos de trabajo.</p>
+            <div class="btn-card btn-boss">
+                Crear cuenta Boss <i data-lucide="arrow-right" style="width: 18px;"></i>
+            </div>
+        </a>
+
     </div>
 
-  </div>
+    <div class="login-footer">
+        <span>¿Ya tienes una cuenta?</span>
+        <a href="{{ url_for('login') }}">
+            <i data-lucide="log-in" style="width: 18px;"></i> Iniciar Sesión
+        </a>
+    </div>
 
-  <a href="{{ url_for('login') }}" class="back-link">← Ya tengo cuenta, quiero iniciar sesión</a>
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 </html>

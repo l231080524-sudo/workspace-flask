@@ -1,245 +1,382 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Perfil Boss | WORKSPACE</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil Boss | WORKSPACE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background: #f3f4f6; color: #1f2937; }
+    <style>
+        :root {
+            --primary: #ff7b00; /* Naranja Boss */
+            --primary-dark: #e66a00;
+            --primary-light: #fff7ed;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+            --blue: #2563eb;
+        }
 
-    /* NAVBAR DASHBOARD */
-    nav {
-      background: #ffffff;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      border-bottom: 3px solid #ffb703;
-    }
-    .nav-brand { color: #ffb703; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
-    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-menu a { color: #4b5563; text-decoration: none; font-weight: 500; transition: 0.3s; }
-    .nav-menu a:hover { color: #ffb703; }
-    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
-    .btn-logout:hover { background: #dc2626; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-    /* LAYOUT PRINCIPAL */
-    .dashboard-container {
-      max-width: 1200px;
-      margin: 3rem auto;
-      padding: 0 1.5rem;
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 2rem;
-    }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
 
-    /* TARJETA DE PERFIL (SIDEBAR) */
-    .profile-card {
-      background: white;
-      padding: 2.5rem 2rem;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
-      position: sticky;
-      top: 2rem;
-      border-top: 5px solid #ffb703;
-    }
-    
-    .avatar {
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      border: 4px solid #ffb703;
-      margin-bottom: 1rem;
-      object-fit: cover;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    
-    .profile-card h2 { color: #1f2937; font-size: 1.6rem; margin-bottom: 0.2rem; }
-    .profile-card .username { font-size: 0.9rem; color: #6b7280; margin-bottom: 1rem; display: block; }
-    
-    .role-badge { 
-      background: #fffbeb; 
-      color: #d97706; 
-      padding: 0.4rem 1.2rem; 
-      border-radius: 20px; 
-      font-size: 0.8rem; 
-      font-weight: 700; 
-      display: inline-block; 
-      margin-bottom: 2rem; 
-      letter-spacing: 1px;
-    }
-    
-    .profile-info { text-align: left; border-top: 1px solid #f3f4f6; padding-top: 1.5rem; }
-    .info-item { margin-bottom: 1.2rem; }
-    .info-label { font-size: 0.75rem; color: #9ca3af; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
-    .info-value { font-size: 1rem; color: #374151; font-weight: 500; }
+        /* Navbar */
+        nav {
+            background: var(--white);
+            padding: 0 20px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
 
-    /* SECCIÓN PRINCIPAL (MAIN) */
-    .welcome-banner {
-      background: linear-gradient(135deg, #ffb703, #fb8500);
-      color: white;
-      padding: 2.5rem;
-      border-radius: 20px;
-      margin-bottom: 2rem;
-      box-shadow: 0 10px 20px -5px rgba(251, 133, 0, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-    .welcome-banner h1 { font-size: 2.2rem; margin-bottom: 0.5rem; position: relative; z-index: 2; }
-    .welcome-banner p { font-size: 1.1rem; opacity: 0.9; position: relative; z-index: 2; }
-    
-    /* Decoración de fondo */
-    .welcome-banner::after {
-      content: '⚡';
-      position: absolute;
-      right: 20px;
-      top: -20px;
-      font-size: 10rem;
-      opacity: 0.15;
-      transform: rotate(15deg);
-    }
+        .nav-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .brand-icon {
+            background: var(--primary);
+            color: white;
+            padding: 5px;
+            border-radius: 6px;
+            display: flex;
+        }
 
-    .section-title { font-size: 1.4rem; color: #374151; margin-bottom: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-    
-    .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-    
-    .action-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      border: 1px solid transparent;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .action-card:hover { 
-      transform: translateY(-5px); 
-      border-color: #ffb703; 
-      box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1); 
-    }
-    
-    .icon-box { 
-      width: 55px; 
-      height: 55px; 
-      background: #fffbeb; 
-      color: #d97706; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      border-radius: 14px; 
-      font-size: 1.8rem; 
-      margin-bottom: 1.2rem; 
-      transition: 0.3s;
-    }
-    
-    .action-card:hover .icon-box { background: #ffb703; color: white; transform: rotate(5deg); }
+        .nav-menu { list-style: none; display: flex; gap: 25px; align-items: center; }
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary); }
 
-    .action-title { font-size: 1.2rem; font-weight: 700; color: #1f2937; margin-bottom: 0.5rem; }
-    .action-desc { font-size: 0.9rem; color: #6b7280; line-height: 1.5; }
+        .btn-logout {
+            color: #ef4444 !important;
+            font-weight: 600;
+        }
+        .btn-logout:hover { color: #dc2626 !important; }
 
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #9ca3af;
-      font-size: 0.9rem;
-      margin-top: 3rem;
-    }
+        .mobile-btn { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-gray); }
 
-    @media (max-width: 900px) {
-      .dashboard-container { grid-template-columns: 1fr; }
-      .profile-card { position: static; margin-bottom: 2rem; }
-    }
-  </style>
+        /* Dashboard Structure */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 30px;
+        }
+
+        /* Sidebar Profile */
+        .profile-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+        
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary-light);
+            background-color: var(--primary-light);
+        }
+
+        .profile-card h2 { font-size: 1.4rem; color: var(--text-dark); margin-bottom: 5px; }
+        .username { color: var(--text-gray); font-size: 0.9rem; margin-bottom: 10px; display: block; }
+        
+        .badge-role {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+
+        .profile-info {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 20px;
+            text-align: left;
+        }
+
+        .info-item { margin-bottom: 15px; }
+        .info-label { 
+            font-size: 0.75rem; 
+            color: #94a3b8; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            margin-bottom: 4px; 
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .info-value { font-size: 0.95rem; color: var(--text-dark); font-weight: 500; }
+
+        /* Main Content */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary), #fb923c);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(255, 123, 0, 0.2);
+        }
+        
+        .banner-content { position: relative; z-index: 10; }
+        .welcome-banner h1 { font-size: 1.8rem; margin-bottom: 5px; }
+        .welcome-banner p { font-size: 1rem; opacity: 0.9; }
+
+        .banner-icon {
+            position: absolute;
+            right: 20px;
+            bottom: -20px;
+            opacity: 0.15;
+            transform: rotate(15deg);
+            width: 120px;
+            height: 120px;
+        }
+
+        /* Actions Grid */
+        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .action-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 180px;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-color: var(--primary-light);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        /* Colores */
+        .card-create .card-icon { background: var(--primary-light); color: var(--primary); }
+        .card-create:hover .card-icon { background: var(--primary); color: white; }
+
+        .card-manage .card-icon { background: #eff6ff; color: var(--blue); }
+        .card-manage:hover .card-icon { background: var(--blue); color: white; }
+
+        .card-config .card-icon { background: #f1f5f9; color: var(--text-dark); }
+        .card-config:hover .card-icon { background: var(--text-dark); color: white; }
+
+        .action-card h3 { font-size: 1.1rem; color: var(--text-dark); margin-bottom: 5px; font-weight: 700; }
+        .action-card p { font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+
+        .card-link-text {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .action-card:hover .card-link-text { color: var(--primary); }
+
+        /* Mensajes Flash */
+        .flash-message {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #dcfce7;
+            color: #166534;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .flash-danger { background: #fee2e2; color: #991b1b; }
+
+        @media (max-width: 900px) {
+            .dashboard-container { grid-template-columns: 1fr; }
+            .profile-card { position: static; margin-bottom: 30px; }
+        }
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-btn { display: block; }
+        }
+    </style>
 </head>
 <body>
 
-  <nav>
-    <a href="{{ url_for('index') }}" class="nav-brand">WORKSPACE.</a>
-    <ul class="nav-menu">
-      <li><a href="{{ url_for('index') }}">Inicio</a></li>
-      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
-    </ul>
-  </nav>
+    <!-- NAVBAR -->
+    <nav>
+        <a href="{{ url_for('index') }}" class="nav-brand">
+            <div class="brand-icon"><i data-lucide="briefcase"></i></div>
+            <span>WORKSPACE.</span>
+        </a>
 
-  <div class="dashboard-container">
-    
-    <!-- SIDEBAR: PERFIL -->
-    <aside class="profile-card">
-      <img src="{{ url_for('static', filename='img/perfil_default.png') }}" class="avatar" alt="Avatar">
-      <h2>{{ boss.nombre }}</h2>
-      <span class="username">@{{ boss.usuario }}</span>
-      <span class="role-badge">BOSS / CLIENTE</span>
+        <ul class="nav-menu">
+            <li><a href="{{ url_for('index') }}" class="active"><i data-lucide="home" style="width: 18px;"></i> Inicio</a></li>
+            <li><a href="{{ url_for('proyectob') }}"><i data-lucide="folder-open" style="width: 18px;"></i> Mis Proyectos</a></li>
+            <li><a href="{{ url_for('logout') }}" class="btn-logout"><i data-lucide="log-out" style="width: 18px;"></i> Salir</a></li>
+        </ul>
 
-      <div class="profile-info">
-        <div class="info-item">
-          <div class="info-label">Empresa / Organización</div>
-          <div class="info-value">{{ boss.area or '—' }}</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Cargo</div>
-          <div class="info-value">{{ boss.descripcion or '—' }}</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Contacto</div>
-          <div class="info-value">{{ boss.correo }}</div>
-        </div>
-      </div>
-    </aside>
+        <button class="mobile-btn"><i data-lucide="menu"></i></button>
+    </nav>
 
-    <!-- MAIN: DASHBOARD -->
-    <main>
-      <div class="welcome-banner">
-        <h1>¡Bienvenido, {{ boss.nombre.split()[0] }}! 👋</h1>
-        <p>¿Listo para liderar tu próximo gran proyecto?</p>
-      </div>
-
-      <div class="section-title">🚀 Panel de Gestión</div>
-
-      <div class="actions-grid">
+    <div class="dashboard-container">
         
-        <!-- Acción 1: Crear Proyecto -->
-        <!-- VERIFICA: href apunta a 'crearproyecto' -->
-        <a href="{{ url_for('crearproyecto') }}" class="action-card">
-          <div class="icon-box">✨</div>
-          <div class="action-title">Crear Nuevo Proyecto</div>
-          <div class="action-desc">Publica una nueva oferta para encontrar talento. Define requisitos y presupuesto.</div>
-        </a>
+        <!-- SIDEBAR -->
+        <aside class="profile-card">
+            <div class="avatar-container">
+                <img src="{{ url_for('static', filename='img/perfil_default.png') }}" 
+                     onerror="this.src='https://ui-avatars.com/api/?name={{ boss.nombre }}&background=ff7b00&color=fff'" 
+                     class="avatar" alt="Avatar">
+            </div>
+            
+            <h2>{{ boss.nombre }}</h2>
+            <span class="username">@{{ boss.usuario }}</span>
+            <span class="badge-role">BOSS / CLIENTE</span>
 
-        <!-- Acción 2: Ver Mis Proyectos -->
-        <!-- VERIFICA: href apunta a 'proyectob' (ESTA ES LA CLAVE) -->
-        <a href="{{ url_for('proyectob') }}" class="action-card">
-          <div class="icon-box">📊</div>
-          <div class="action-title">Mis Proyectos</div>
-          <div class="action-desc">Administra tus ofertas activas, revisa postulaciones y selecciona candidatos.</div>
-        </a>
+            <div class="profile-info">
+                <div class="info-item">
+                    <div class="info-label"><i data-lucide="building-2" style="width: 14px;"></i> Empresa</div>
+                    <div class="info-value">{{ boss.area or 'No especificada' }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label"><i data-lucide="id-card" style="width: 14px;"></i> Cargo</div>
+                    <div class="info-value">{{ boss.descripcion or 'No especificado' }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label"><i data-lucide="mail" style="width: 14px;"></i> Contacto</div>
+                    <div class="info-value" style="font-size: 0.85rem;">{{ boss.correo }}</div>
+                </div>
+            </div>
+        </aside>
 
-        <!-- Acción 3: Editar Perfil -->
-        <a href="{{ url_for('perfilb') }}" class="action-card">
-          <div class="icon-box">⚙️</div>
-          <div class="action-title">Configuración</div>
-          <div class="action-desc">Actualiza los datos de tu empresa, información de contacto y preferencias.</div>
-        </a>
-      </div>
-    </main>
+        <!-- MAIN -->
+        <main>
+            
+            <!-- Mensajes Flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ 'flash-danger' if category == 'danger' else '' }}">
+                            <i data-lucide="{{ 'alert-circle' if category == 'danger' else 'check-circle' }}" style="width: 20px;"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
-  </div>
+            <div class="welcome-banner">
+                <div class="banner-content">
+                    <h1>¡Hola, {{ boss.nombre.split()[0] }}! 👋</h1>
+                    <p>¿Listo para liderar tu próximo gran proyecto?</p>
+                </div>
+                <i data-lucide="crown" class="banner-icon"></i>
+            </div>
 
-  <footer>
-    <p>© 2025 WORKSPACE - Potenciando el talento global.</p>
-  </footer>
+            <h3 class="section-title"><i data-lucide="layout-grid" style="color: var(--primary);"></i> Panel de Gestión</h3>
+
+            <div class="actions-grid">
+                
+                <a href="{{ url_for('crearproyecto') }}" class="action-card card-create">
+                    <div>
+                        <div class="card-icon"><i data-lucide="plus-circle"></i></div>
+                        <h3>Publicar Proyecto</h3>
+                        <p>Crea una nueva oferta para encontrar al talento ideal para tu equipo.</p>
+                    </div>
+                    <span class="card-link-text">Empezar ahora <i data-lucide="arrow-right" style="width: 16px;"></i></span>
+                </a>
+
+                <a href="{{ url_for('proyectob') }}" class="action-card card-manage">
+                    <div>
+                        <div class="card-icon"><i data-lucide="folder-kanban"></i></div>
+                        <h3>Mis Proyectos</h3>
+                        <p>Revisa postulaciones, selecciona candidatos y gestiona el progreso.</p>
+                    </div>
+                    <span class="card-link-text">Ver tablero <i data-lucide="arrow-right" style="width: 16px;"></i></span>
+                </a>
+
+                <!-- ACTUALIZADO: Enlace a Editar Perfil Boss -->
+                <a href="{{ url_for('editar_perfil_boss') }}" class="action-card card-config">
+                    <div>
+                        <div class="card-icon"><i data-lucide="settings"></i></div>
+                        <h3>Configuración</h3>
+                        <p>Actualiza los datos de tu empresa, información de contacto y preferencias.</p>
+                    </div>
+                    <span class="card-link-text">Editar perfil <i data-lucide="arrow-right" style="width: 16px;"></i></span>
+                </a>
+
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 </html>

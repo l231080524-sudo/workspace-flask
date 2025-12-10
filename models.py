@@ -4,22 +4,19 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
-# Refleja el esquema que compartiste
 class User(UserMixin, db.Model):
     __tablename__ = "users"
-    user_id = db.Column(db.Integer, primary_key=True)               # SERIAL
+    user_id = db.Column(db.Integer, primary_key=True)               
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.Text, nullable=False)
-    user_type = db.Column(db.String(20))  # 'employee' o 'boss'
+    user_type = db.Column(db.String(20))  
     registration_date = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Flask-Login requiere un id property; adaptamos:
     @property
     def id(self):
         return self.user_id
 
-    # Relaciones (opcional, ayuda al ORM)
     employee = db.relationship("Employee", backref="user", uselist=False, cascade="all, delete")
     boss = db.relationship("Boss", backref="user", uselist=False, cascade="all, delete")
 
@@ -54,7 +51,7 @@ class JobOffer(db.Model):
     salary = db.Column(db.Numeric(10,2))
     location = db.Column(db.String(100))
     publish_date = db.Column(db.DateTime, default=datetime.utcnow)
-    status = db.Column(db.String(20), default="open")  # open/closed
+    status = db.Column(db.String(20), default="open")  
 
     applications = db.relationship("Application", backref="job_offer", cascade="all, delete")
 
@@ -64,6 +61,6 @@ class Application(db.Model):
     employee_id = db.Column(db.Integer, db.ForeignKey("employees.employee_id", ondelete="CASCADE"), nullable=False)
     offer_id = db.Column(db.Integer, db.ForeignKey("job_offers.offer_id", ondelete="CASCADE"), nullable=False)
     application_date = db.Column(db.DateTime, default=datetime.utcnow)
-    status = db.Column(db.String(20), default="pending")  # pending/accepted/rejected
+    status = db.Column(db.String(20), default="pending")  
 
     __table_args__ = (db.UniqueConstraint('employee_id', 'offer_id', name='uix_employee_offer'), )

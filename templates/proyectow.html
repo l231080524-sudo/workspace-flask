@@ -1,263 +1,310 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buscar Proyectos | WORKSPACE</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Proyectos | WORKSPACE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background: #f0f4f8; color: #1e293b; }
+    <style>
+        :root {
+            --primary: #2563eb; /* Azul Worker */
+            --primary-dark: #1e40af;
+            --primary-light: #eff6ff;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --bg-body: #f1f5f9;
+            --white: #ffffff;
+            --green: #10b981;
+            --green-light: #dcfce7;
+            --green-text: #166534;
+            --red-bg: #fef2f2;
+            --red-text: #b91c1c;
+            --red-border: #fecaca;
+        }
 
-    /* NAVBAR CONSISTENTE (WORKER) */
-    nav {
-      background: #ffffff;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      border-bottom: 3px solid #2563eb;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .nav-brand { color: #2563eb; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
-    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-menu a { color: #64748b; text-decoration: none; font-weight: 500; transition: 0.3s; }
-    .nav-menu a:hover { color: #2563eb; }
-    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
-    .btn-logout:hover { background: #dc2626; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-    /* CONTENEDOR PRINCIPAL */
-    .main-container {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
 
-    .page-header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-    .page-header h1 {
-      font-size: 2.5rem;
-      color: #1e293b;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-    .page-header p {
-      color: #64748b;
-      font-size: 1.1rem;
-    }
+        /* --- NAVBAR --- */
+        nav {
+            background: var(--white);
+            padding: 0 20px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
 
-    /* ALERTAS FLASH (NUEVO) */
-    .alert-container {
-      margin-bottom: 30px;
-    }
-    .alert {
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      font-weight: 500;
-      text-align: center;
-    }
-    .alert-success { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-    .alert-danger { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-    .alert-warning { background-color: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
-    .alert-info { background-color: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+        .nav-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .brand-icon {
+            background: var(--primary);
+            color: white;
+            padding: 5px;
+            border-radius: 6px;
+            display: flex;
+        }
 
-    /* GRID DE PROYECTOS */
-    .proyectos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 30px;
-    }
+        .nav-menu { list-style: none; display: flex; gap: 25px; align-items: center; }
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary); }
 
-    .proyecto-card {
-      background: white;
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-      border: 1px solid transparent;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-    }
+        .btn-logout { color: #ef4444 !important; font-weight: 600; }
+        .btn-logout:hover { color: #dc2626 !important; }
 
-    .proyecto-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
-      border-color: #2563eb;
-    }
+        /* Mobile Menu */
+        .mobile-btn { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-gray); }
 
-    /* Borde decorativo superior */
-    .proyecto-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 5px;
-      background: linear-gradient(90deg, #2563eb, #60a5fa);
-    }
+        /* --- CONTENEDOR --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    .card-header { margin-bottom: 15px; }
-    
-    .proyecto-card h3 {
-      font-size: 1.4rem;
-      color: #1e293b;
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
+        /* --- ALERTS --- */
+        .alert-container { margin-bottom: 30px; }
+        .alert {
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .alert-success { background: var(--green-light); color: var(--green-text); border: 1px solid #bbf7d0; }
+        .alert-danger { background: var(--red-bg); color: var(--red-text); border: 1px solid var(--red-border); }
+        .alert-info, .alert-warning { background: var(--primary-light); color: var(--primary); border: 1px solid #bfdbfe; }
 
-    .badge-date {
-      display: inline-block;
-      background: #eff6ff;
-      color: #2563eb;
-      font-size: 0.8rem;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-weight: 600;
-      margin-bottom: 15px;
-    }
+        /* --- HEADER PAGINA --- */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .page-header h1 { font-size: 2.2rem; color: var(--text-dark); margin-bottom: 10px; font-weight: 800; }
+        .page-header p { color: var(--text-gray); font-size: 1.1rem; }
 
-    .card-body {
-      color: #475569;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 25px;
-      flex-grow: 1; /* Empuja el botón hacia abajo */
-    }
+        /* --- GRID PROYECTOS --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 25px;
+        }
 
-    .btn-postular {
-      width: 100%;
-      padding: 12px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
+        .project-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .btn-postular:hover {
-      background: #1e40af;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-    }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            border-color: var(--primary-light);
+        }
 
-    /* ESTADO VACÍO */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      color: #64748b;
-    }
-    .empty-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
-      display: block;
-      color: #cbd5e1;
-    }
+        /* Borde superior decorativo */
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--primary);
+        }
 
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #94a3b8;
-      font-size: 0.9rem;
-      margin-top: 3rem;
-    }
+        .card-header { margin-bottom: 15px; }
+        
+        .badge-new {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 50px;
+            background: var(--primary-light);
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
 
-    @media (max-width: 600px) {
-      .page-header h1 { font-size: 2rem; }
-      .nav-menu { display: none; } /* En móvil podrías querer un menú hamburguesa */
-    }
-  </style>
+        .project-card h3 { font-size: 1.3rem; color: var(--text-dark); font-weight: 700; line-height: 1.4; margin-bottom: 5px; }
+        
+        .date-info { font-size: 0.85rem; color: var(--text-gray); display: flex; align-items: center; gap: 5px; font-weight: 500; }
+
+        .card-desc {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+
+        .btn-postular {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-postular:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* --- EMPTY STATE --- */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--white);
+            border-radius: 20px;
+            border: 2px dashed #e2e8f0;
+            color: var(--text-gray);
+        }
+        .empty-icon { width: 70px; height: 70px; color: #cbd5e1; margin-bottom: 20px; }
+        .empty-state h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--text-dark); }
+        .empty-state p { margin-bottom: 20px; }
+        .link-jobs { color: var(--primary); font-weight: 600; text-decoration: none; }
+        .link-jobs:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-btn { display: block; }
+            .page-header h1 { font-size: 1.8rem; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- NAVBAR WORKER -->
-  <nav>
-    <a href="{{ url_for('perfilw') }}" class="nav-brand">WORKSPACE.</a>
-    <ul class="nav-menu">
-      <li><a href="{{ url_for('perfilw') }}">Mi Perfil</a></li>
-      <li><a href="{{ url_for('proyectow') }}">Buscar Proyectos</a></li>
-      <li><a href="{{ url_for('trabajospendientes') }}">Trabajos Pendientes</a></li>
-      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
-    </ul>
-  </nav>
+    <!-- NAVBAR -->
+    <nav>
+        <a href="{{ url_for('perfilw') }}" class="nav-brand">
+            <div class="brand-icon"><i data-lucide="briefcase"></i></div>
+            <span>WORKSPACE.</span>
+        </a>
 
-  <div class="main-container">
-    
-    <!-- BLOQUE DE MENSAJES FLASH (AQUÍ APARECERÁ EL ÉXITO) -->
-    <div class="alert-container">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">
-              {{ message }}
+        <ul class="nav-menu">
+            <li><a href="{{ url_for('perfilw') }}"><i data-lucide="user" style="width: 18px;"></i> Mi Perfil</a></li>
+            <li><a href="{{ url_for('proyectow') }}" class="active"><i data-lucide="search" style="width: 18px;"></i> Buscar Proyectos</a></li>
+            <li><a href="{{ url_for('trabajospendientes') }}"><i data-lucide="check-square" style="width: 18px;"></i> Mis Trabajos</a></li>
+            <li><a href="{{ url_for('logout') }}" class="btn-logout"><i data-lucide="log-out" style="width: 18px;"></i> Salir</a></li>
+        </ul>
+
+        <button class="mobile-btn"><i data-lucide="menu"></i></button>
+    </nav>
+
+    <div class="container">
+        
+        <!-- ALERTAS -->
+        <div class="alert-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <i data-lucide="{{ 'check-circle' if category == 'success' else 'alert-circle' }}" style="width: 20px;"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- HEADER -->
+        <div class="page-header">
+            <h1>Explora Oportunidades</h1>
+            <p>Encuentra el proyecto perfecto para demostrar tus habilidades.</p>
+        </div>
+
+        {% if proyectos %}
+            <div class="projects-grid">
+                {% for p in proyectos %}
+                    <div class="project-card">
+                        
+                        <div class="card-header">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                <span class="badge-new">Disponible</span>
+                                <div class="date-info">
+                                    <i data-lucide="calendar" style="width: 14px;"></i> {{ p.fecha_limite }}
+                                </div>
+                            </div>
+                            <h3 style="margin-top: 10px;">{{ p.titulo }}</h3>
+                        </div>
+
+                        <div class="card-desc">
+                            <p>{{ p.descripcion }}</p>
+                        </div>
+
+                        <form method="POST" action="{{ url_for('solicitudes') }}">
+                            <input type="hidden" name="proyecto_id" value="{{ p.id }}">
+                            <button class="btn-postular">
+                                <i data-lucide="send" style="width: 18px;"></i> Postularme Ahora
+                            </button>
+                        </form>
+
+                    </div>
+                {% endfor %}
             </div>
-          {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i data-lucide="inbox" class="empty-icon"></i>
+                <h3>No hay proyectos disponibles</h3>
+                <p>Vuelve más tarde o revisa el estado de tus postulaciones.</p>
+                <a href="{{ url_for('trabajospendientes') }}" class="link-jobs">Ir a mis trabajos activos →</a>
+            </div>
         {% endif %}
-      {% endwith %}
+
     </div>
 
-    <div class="page-header">
-      <h1>Explora Oportunidades</h1>
-      <p>Encuentra el proyecto perfecto para demostrar tus habilidades.</p>
-    </div>
-
-    {% if proyectos %}
-      <div class="proyectos-grid">
-        {% for p in proyectos %}
-          <div class="proyecto-card">
-            
-            <div class="card-header">
-              <span class="badge-date">📅 Límite: {{ p.fecha_limite }}</span>
-              <h3>{{ p.titulo }}</h3>
-            </div>
-
-            <div class="card-body">
-              <p>{{ p.descripcion }}</p>
-            </div>
-
-            <form method="POST" action="{{ url_for('solicitudes') }}">
-              <input type="hidden" name="proyecto_id" value="{{ p.id }}">
-              <button class="btn-postular">
-                ✉️ Postularme Ahora
-              </button>
-            </form>
-
-          </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="empty-state">
-        <span class="empty-icon">📭</span>
-        <h3>No hay proyectos disponibles por el momento</h3>
-        <p>Vuelve más tarde o revisa tus trabajos pendientes.</p>
-        <a href="{{ url_for('trabajospendientes') }}" style="color: #2563eb; font-weight: 600; margin-top: 10px; display: inline-block;">Ir a mis trabajos</a>
-      </div>
-    {% endif %}
-
-  </div>
-
-  <footer>
-    <p>© 2025 WORKSPACE - Tu plataforma de crecimiento.</p>
-  </footer>
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 </html>

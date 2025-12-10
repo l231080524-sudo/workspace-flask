@@ -1,298 +1,365 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trabajos Pendientes | WORKSPACE</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabajos Pendientes | WORKSPACE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    
-    body { background: #f0f4f8; color: #1e293b; }
+    <style>
+        :root {
+            --primary: #2563eb; /* Azul Worker */
+            --primary-dark: #1e40af;
+            --primary-light: #eff6ff;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+            --green: #10b981;
+            --green-light: #dcfce7;
+            --green-text: #166534;
+        }
 
-    /* NAVBAR WORKER */
-    nav {
-      background: #ffffff;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      border-bottom: 3px solid #2563eb;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .nav-brand { color: #2563eb; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
-    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-menu a { color: #64748b; text-decoration: none; font-weight: 500; transition: 0.3s; }
-    .nav-menu a:hover { color: #2563eb; }
-    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
-    .btn-logout:hover { background: #dc2626; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-    /* CONTENEDOR */
-    .container {
-      max-width: 1100px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
 
-    .page-header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-    .page-header h1 {
-      font-size: 2.2rem;
-      color: #1e293b;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-    .page-header p {
-      color: #64748b;
-      font-size: 1.1rem;
-    }
+        /* --- NAVBAR --- */
+        nav {
+            background: var(--white);
+            padding: 0 20px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
 
-    /* SECCIONES */
-    .section-block {
-      margin-bottom: 60px;
-    }
+        .nav-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .brand-icon {
+            background: var(--primary);
+            color: white;
+            padding: 5px;
+            border-radius: 6px;
+            display: flex;
+        }
 
-    .section-title {
-      font-size: 1.5rem;
-      color: #334155;
-      margin-bottom: 25px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #e2e8f0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+        .nav-menu { list-style: none; display: flex; gap: 25px; align-items: center; }
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary); }
 
-    /* GRID DE TRABAJOS */
-    .jobs-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 25px;
-    }
+        .btn-logout {
+            color: #ef4444 !important;
+            font-weight: 600;
+        }
+        .btn-logout:hover { color: #dc2626 !important; }
 
-    /* TARJETAS */
-    .job-card {
-      background: white;
-      border-radius: 16px;
-      padding: 25px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      transition: transform 0.3s, box-shadow 0.3s;
-      border: 1px solid transparent;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+        .mobile-btn { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-gray); }
 
-    .job-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px -5px rgba(0,0,0,0.1);
-    }
+        /* --- CONTENEDOR --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    .job-header h3 {
-      font-size: 1.3rem;
-      color: #1e293b;
-      margin-bottom: 5px;
-      font-weight: 600;
-    }
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .page-header h1 { font-size: 2rem; color: var(--text-dark); margin-bottom: 5px; }
+        .page-header p { color: var(--text-gray); font-size: 1.1rem; }
 
-    .client-name {
-      font-size: 0.9rem;
-      color: #64748b;
-      font-weight: 500;
-      margin-bottom: 15px;
-      display: block;
-    }
+        /* --- MENSAJES FLASH --- */
+        .flash-container { margin-bottom: 30px; }
+        .alert {
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--green-light);
+            color: var(--green-text);
+            border: 1px solid #bbf7d0;
+        }
 
-    .job-desc {
-      color: #475569;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 20px;
-      flex-grow: 1;
-    }
+        /* --- SECCIONES --- */
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin: 50px 0 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title:first-of-type { margin-top: 0; }
 
-    .job-footer {
-      border-top: 1px solid #f1f5f9;
-      padding-top: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        /* --- GRID --- */
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 25px;
+        }
 
-    .date-info {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      font-weight: 600;
-    }
+        /* --- TARJETA --- */
+        .job-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
 
-    /* ESTILOS ESPECÍFICOS: EN CURSO */
-    .card-active {
-      border-top: 5px solid #2563eb; /* Azul */
-    }
-    .btn-details {
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      border: none;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .btn-details:hover { background: #1e40af; }
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            border-color: var(--primary-light);
+        }
 
-    /* ESTILOS ESPECÍFICOS: COMPLETADO */
-    .card-completed {
-      border-top: 5px solid #10b981; /* Verde */
-      background: #f8fafc;
-      opacity: 0.9;
-    }
-    .card-completed h3 { color: #0f172a; text-decoration: line-through; text-decoration-color: #10b981; }
-    
-    .badge-done {
-      background: #dcfce7;
-      color: #166534;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
+        /* Borde superior */
+        .job-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--primary);
+        }
 
-    .btn-view-old {
-      background: white;
-      border: 1px solid #cbd5e1;
-      color: #64748b;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .btn-view-old:hover { border-color: #10b981; color: #10b981; }
+        /* Estilo Finalizado */
+        .card-completed::before { background: var(--green); }
+        .card-completed { opacity: 0.9; }
 
-    /* EMPTY STATE */
-    .empty-message {
-      text-align: center;
-      padding: 30px;
-      background: white;
-      border-radius: 12px;
-      color: #94a3b8;
-      border: 2px dashed #e2e8f0;
-    }
+        .card-header { margin-bottom: 15px; }
+        
+        .client-info {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
 
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #94a3b8;
-      font-size: 0.9rem;
-      margin-top: 3rem;
-    }
+        .job-card h3 { font-size: 1.3rem; color: var(--text-dark); font-weight: 700; line-height: 1.3; margin-bottom: 10px; }
 
-    @media (max-width: 600px) {
-      .job-footer { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .btn-details, .btn-view-old { width: 100%; }
-    }
-  </style>
+        .card-desc {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .date-info { font-size: 0.85rem; color: var(--text-gray); display: flex; align-items: center; gap: 5px; }
+
+        .btn-details {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-details:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        .btn-view-old {
+            background: var(--white);
+            color: var(--green-text);
+            border: 1px solid #dcfce7;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-view-old:hover { background: #f0fdf4; border-color: var(--green); }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--white);
+            border-radius: 20px;
+            border: 2px dashed #e2e8f0;
+            color: var(--text-gray);
+        }
+        .empty-icon { width: 50px; height: 50px; color: #cbd5e1; margin-bottom: 15px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-btn { display: block; }
+            .card-footer { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .btn-details, .btn-view-old { width: 100%; justify-content: center; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- NAVBAR WORKER -->
-  <nav>
-    <a href="{{ url_for('perfilw') }}" class="nav-brand">WORKSPACE.</a>
-    <ul class="nav-menu">
-      <li><a href="{{ url_for('perfilw') }}">Mi Perfil</a></li>
-      <li><a href="{{ url_for('proyectow') }}">Buscar Proyectos</a></li>
-      <li><a href="{{ url_for('trabajospendientes') }}">Trabajos Pendientes</a></li>
-      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
-    </ul>
-  </nav>
+    <!-- NAVBAR -->
+    <nav>
+        <a href="{{ url_for('perfilw') }}" class="nav-brand">
+            <div class="brand-icon"><i data-lucide="briefcase"></i></div>
+            <span>WORKSPACE.</span>
+        </a>
 
-  <div class="container">
-    
-    <div class="page-header">
-      <h1>Gestión de Trabajos</h1>
-      <p>Controla tus proyectos activos y revisa tu historial de éxitos.</p>
-    </div>
+        <ul class="nav-menu">
+            <li><a href="{{ url_for('perfilw') }}"><i data-lucide="user" style="width: 18px;"></i> Mi Perfil</a></li>
+            <li><a href="{{ url_for('proyectow') }}"><i data-lucide="search" style="width: 18px;"></i> Buscar Proyectos</a></li>
+            <li><a href="{{ url_for('trabajospendientes') }}" class="active"><i data-lucide="check-square" style="width: 18px;"></i> Mis Trabajos</a></li>
+            <li><a href="{{ url_for('logout') }}" class="btn-logout"><i data-lucide="log-out" style="width: 18px;"></i> Salir</a></li>
+        </ul>
 
-    <!-- SECCIÓN 1: PENDIENTES (EN CURSO) -->
-    <div class="section-block">
-      <h2 class="section-title">🛠️ En Curso</h2>
-      
-      {% if pendientes %}
-        <div class="jobs-grid">
-          {% for t in pendientes %}
-            <div class="job-card card-active">
-              <div class="job-header">
-                <h3>{{ t.titulo }}</h3>
-                <span class="client-name">Cliente: {{ t.cliente }}</span>
-              </div>
-              
-              <p class="job-desc">{{ t.descripcion }}</p>
+        <button class="mobile-btn"><i data-lucide="menu"></i></button>
+    </nav>
 
-              <div class="job-footer">
-                <span class="date-info">📅 Entrega: {{ t.fecha_limite }}</span>
-                
-                <form method="POST" action="{{ url_for('ver_trabajopendiente') }}">
-                  <input type="hidden" name="id" value="{{ t.id }}">
-                  <button class="btn-details">Ver Detalles →</button>
-                </form>
-              </div>
-            </div>
-          {% endfor %}
+    <div class="container">
+        
+        <div class="page-header">
+            <h1>Gestión de Trabajos</h1>
+            <p>Controla tus proyectos activos y revisa tu historial de éxitos.</p>
         </div>
-      {% else %}
-        <div class="empty-message">No tienes trabajos activos en este momento.</div>
-      {% endif %}
-    </div>
 
-    <!-- SECCIÓN 2: COMPLETADOS (HISTORIAL) -->
-    <div class="section-block">
-      <h2 class="section-title">✅ Historial Finalizado</h2>
-
-      {% if completados %}
-        <div class="jobs-grid">
-          {% for t in completados %}
-            <div class="job-card card-completed">
-              <div class="job-header">
-                <div style="display:flex; justify-content:space-between; align-items:start;">
-                  <h3>{{ t.titulo }}</h3>
-                  <span class="badge-done">Pagado</span>
-                </div>
-                <span class="client-name">Cliente: {{ t.cliente }}</span>
-              </div>
-              
-              <div class="job-footer" style="margin-top: 20px;">
-                <span class="date-info" style="color: #16a34a;">💰 Pago: ${{ t.pago }}</span>
-                
-                <form method="POST" action="{{ url_for('ver_trabajopendiente') }}">
-                  <input type="hidden" name="id" value="{{ t.id }}">
-                  <button class="btn-view-old">Ver Resumen</button>
-                </form>
-              </div>
-            </div>
-          {% endfor %}
+        <!-- Mensajes Flash -->
+        <div class="flash-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert">
+                            <i data-lucide="check-circle" style="width: 20px;"></i> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         </div>
-      {% else %}
-        <div class="empty-message">Aún no has completado ningún trabajo. ¡Sigue así!</div>
-      {% endif %}
+
+        <!-- SECCIÓN 1: EN CURSO -->
+        <h2 class="section-title">
+            <i data-lucide="zap" style="color: var(--primary);"></i> En Curso
+        </h2>
+        
+        {% if pendientes %}
+            <div class="jobs-grid">
+                {% for t in pendientes %}
+                    <div class="job-card">
+                        <div class="card-header">
+                            <span class="client-info">Cliente: {{ t.cliente }}</span>
+                            <h3>{{ t.titulo }}</h3>
+                        </div>
+                        
+                        <p class="card-desc">{{ t.descripcion }}</p>
+
+                        <div class="card-footer">
+                            <span class="date-info">
+                                <i data-lucide="calendar" style="width: 14px;"></i> Entrega: {{ t.fecha_limite }}
+                            </span>
+                            
+                            <form method="POST" action="{{ url_for('ver_trabajopendiente') }}">
+                                <input type="hidden" name="id" value="{{ t.id }}">
+                                <button class="btn-details">
+                                    Ver Detalles <i data-lucide="arrow-right" style="width: 16px;"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i data-lucide="coffee" class="empty-icon"></i>
+                <p>No tienes trabajos activos en este momento.</p>
+            </div>
+        {% endif %}
+
+        <!-- SECCIÓN 2: COMPLETADOS -->
+        <h2 class="section-title">
+            <i data-lucide="check-circle" style="color: var(--green);"></i> Historial Finalizado
+        </h2>
+
+        {% if completados %}
+            <div class="jobs-grid">
+                {% for t in completados %}
+                    <div class="job-card card-completed">
+                        <div class="card-header">
+                            <span class="client-info" style="color: var(--green-text);">Finalizado</span>
+                            <h3 style="text-decoration: line-through; color: #94a3b8;">{{ t.titulo }}</h3>
+                        </div>
+                        
+                        <div class="card-footer" style="margin-top: auto;">
+                            <span class="date-info" style="color: var(--green-text); font-weight: 600;">
+                                <i data-lucide="dollar-sign" style="width: 14px;"></i> Pago: ${{ t.pago }}
+                            </span>
+                            
+                            <form method="POST" action="{{ url_for('ver_trabajopendiente') }}">
+                                <input type="hidden" name="id" value="{{ t.id }}">
+                                <button class="btn-view-old">Ver Resumen</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="color: var(--text-gray); font-style: italic; margin-bottom: 50px;">Aún no has completado ningún trabajo. ¡Sigue así!</p>
+        {% endif %}
+
     </div>
 
-  </div>
-
-  <footer>
-    <p>© 2025 WORKSPACE - Tu historial profesional.</p>
-  </footer>
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 </html>

@@ -15,9 +15,6 @@ def create_app():
 
     db.init_app(app)
 
-    # ----------------------
-    # Login Manager
-    # ----------------------
     login_manager = LoginManager()
     login_manager.login_view = "login"
     login_manager.init_app(app)
@@ -30,9 +27,7 @@ def create_app():
             app.logger.exception("load_user error: %s", e)
             return None
 
-    # ----------------------
-    # Decoradores de rol
-    # ----------------------
+    # --- Decoradores de Roles ---
     def boss_required(f):
         @wraps(f)
         def wrap(*args, **kwargs):
@@ -51,9 +46,7 @@ def create_app():
             return f(*args, **kwargs)
         return wrap
 
-    # ----------------------
-    # PÁGINAS PÚBLICAS
-    # ----------------------
+    # --- Rutas Públicas ---
     @app.route("/")
     def index():
         return render_template("index.html")
@@ -66,6 +59,7 @@ def create_app():
     def porque():
         return render_template("porque.html")
 
+    # --- Rutas de Registro y Login ---
     @app.route("/registroa")
     def registroa():
         return render_template("registroa.html")
@@ -78,9 +72,6 @@ def create_app():
     def registrob():
         return render_template("registrob.html")
 
-    # ----------------------
-    # REGISTRO WORKER
-    # ----------------------
     @app.route("/registrar_worker", methods=["POST"])
     def registrar_worker():
         nombre = request.form.get("nombre", "").strip()
@@ -94,7 +85,6 @@ def create_app():
             return redirect(url_for("registro"))
 
         password_hash = generate_password_hash(password)
-        # Nota: 'usuario' no se usa en el modelo User actual, usamos nombre completo
         user = User(
             name=f"{nombre} {apellidos}",
             email=correo,
@@ -139,9 +129,6 @@ def create_app():
         flash("Registro exitoso. Ya puedes iniciar sesión.", "success")
         return redirect(url_for("login"))
 
-    # ----------------------
-    # REGISTRO BOSS
-    # ----------------------
     @app.route("/registrar_boss", methods=["POST"])
     def registrar_boss():
         nombre = request.form.get("nombre", "").strip()
@@ -201,21 +188,16 @@ def create_app():
         flash("Registro Boss completo.", "success")
         return redirect(url_for("login"))
 
-    # ----------------------
-    # LOGIN / LOGOUT (MODIFICADO)
-    # ----------------------
     @app.route("/login", methods=["GET", "POST"])
     def login():
-        # Lógica de Redirección si ya está autenticado (NUEVO REQUISITO)
         if current_user.is_authenticated:
             if getattr(current_user, "user_type", None) == 'boss':
-                return redirect(url_for('perfilb')) # Boss a su perfil
+                return redirect(url_for('perfilb')) 
             elif getattr(current_user, "user_type", None) == 'employee':
-                return redirect(url_for('perfilw')) # Worker a su perfil
-            return redirect(url_for('index')) # Caso atípico
+                return redirect(url_for('perfilw')) 
+            return redirect(url_for('index')) 
 
         if request.method == "GET":
-            # Si NO está autenticado, renderiza el template login
             return render_template("login.html")
 
         email = request.form.get("email", "").strip().lower()
@@ -235,23 +217,20 @@ def create_app():
 
         login_user(user)
         
-        # Redirección tras login (Lógica original)
         if getattr(user, "user_type", None) == "boss":
             return redirect(url_for("perfilb"))
         else:
-            return redirect(url_for("proyectow")) # Worker redirige a la búsqueda de proyectos
+            return redirect(url_for("proyectow")) 
 
     @app.route("/logout")
     @login_required
     def logout():
         logout_user()
         flash("Sesión cerrada.", "info")
-        # Redirección al login (NUEVO REQUISITO)
         return redirect(url_for("login")) 
 
-    # ----------------------
-    # RUTAS BOSS
-    # ----------------------
+    # --- RUTAS DE BOSS ---
+
     @app.route("/perfilb")
     @login_required
     @boss_required
@@ -270,6 +249,32 @@ def create_app():
         }
         return render_template("perfilb.html", boss=boss, boss_obj=boss_obj)
 
+    # NUEVA RUTA: Editar Perfil Boss
+    @app.route("/editar_perfil_boss", methods=["GET", "POST"])
+    @login_required
+    @boss_required
+    def editar_perfil_boss():
+        boss = Boss.query.filter_by(user_id=current_user.user_id).first()
+        
+        if request.method == "POST":
+            boss.name = request.form.get("nombre")
+            boss.address = request.form.get("empresa")
+            boss.contact = request.form.get("cargo")
+            boss.phone = request.form.get("telefono")
+            
+            # Actualizamos también el nombre en la tabla User para coherencia
+            current_user.name = request.form.get("nombre")
+            
+            try:
+                db.session.commit()
+                flash("Perfil actualizado correctamente.", "success")
+                return redirect(url_for("perfilb"))
+            except Exception:
+                db.session.rollback()
+                flash("Error al actualizar el perfil.", "danger")
+
+        return render_template("editarperfilb.html", boss=boss)
+
     @app.route("/proyectob")
     @login_required
     @boss_required
@@ -279,7 +284,6 @@ def create_app():
             flash("Perfil Boss no encontrado.", "warning")
             return redirect(url_for("index"))
 
-        # Lógica de separación de proyectos (ACTUALIZADA)
         all_jobs = JobOffer.query.filter_by(boss_id=boss_obj.boss_id).order_by(JobOffer.publish_date.desc()).all()
 
         activos = []
@@ -306,7 +310,6 @@ def create_app():
             else:
                 activos.append(datos_proyecto)
 
-        # Enviamos DOS listas
         return render_template("proyectob.html", activos=activos, finalizados=finalizados)
 
     @app.route("/crearproyecto", methods=["GET", "POST"])
@@ -352,7 +355,6 @@ def create_app():
     def detallesolicitud(id):
         job = JobOffer.query.get_or_404(id)
         
-        # Seguridad: Boss solo ve sus propios proyectos
         boss_obj = Boss.query.filter_by(user_id=current_user.user_id).first()
         if not boss_obj or job.boss_id != boss_obj.boss_id:
              flash("Acceso denegado.", "danger")
@@ -369,6 +371,7 @@ def create_app():
                 "fecha": a.application_date.strftime('%Y-%m-%d')
             })
         solicitud = {
+            "id": job.offer_id, 
             "proyecto": job.title,
             "descripcion": job.description,
             "categoria": job.location,
@@ -377,20 +380,64 @@ def create_app():
         }
         return render_template("detallesolicitud.html", solicitud=solicitud, postulaciones=postulaciones)
 
-    # ----------------------
-    # GESTIÓN SOLICITUDES (BOSS)
-    # ----------------------
+    # NUEVA RUTA: Editar Proyecto
+    @app.route("/editar_proyecto/<int:id>", methods=["GET", "POST"])
+    @login_required
+    @boss_required
+    def editar_proyecto(id):
+        job = JobOffer.query.get_or_404(id)
+        boss = Boss.query.filter_by(user_id=current_user.user_id).first()
+        
+        if job.boss_id != boss.boss_id:
+            flash("No tienes permiso para editar este proyecto.", "danger")
+            return redirect(url_for("proyectob"))
+
+        if request.method == "POST":
+            job.title = request.form.get("titulo")
+            job.description = request.form.get("descripcion")
+            job.location = request.form.get("ubicacion")
+            presupuesto = request.form.get("presupuesto")
+            if presupuesto:
+                job.salary = float(presupuesto)
+            
+            db.session.commit()
+            flash("Proyecto actualizado correctamente.", "success")
+            return redirect(url_for("detallesolicitud", id=job.offer_id))
+
+        return render_template("editarproyecto.html", proyecto=job)
+
+    # NUEVA RUTA: Eliminar Proyecto
+    @app.route("/eliminar_proyecto/<int:id>", methods=["POST"])
+    @login_required
+    @boss_required
+    def eliminar_proyecto(id):
+        job = JobOffer.query.get_or_404(id)
+        boss = Boss.query.filter_by(user_id=current_user.user_id).first()
+
+        if job.boss_id != boss.boss_id:
+            flash("No tienes permiso para eliminar este proyecto.", "danger")
+            return redirect(url_for("proyectob"))
+
+        try:
+            db.session.delete(job)
+            db.session.commit()
+            flash("Proyecto eliminado.", "success")
+        except Exception:
+            db.session.rollback()
+            flash("Error al eliminar el proyecto.", "danger")
+
+        return redirect(url_for("proyectob"))
+
     @app.route("/gestionar_solicitud", methods=["POST"])
     @login_required
     @boss_required
     def gestionar_solicitud():
         app_id = request.form.get("app_id")
-        accion = request.form.get("accion") # 'aceptar' o 'rechazar'
+        accion = request.form.get("accion") 
 
         application = Application.query.get_or_404(int(app_id))
         job = JobOffer.query.get(application.offer_id)
         
-        # Seguridad: verificar dueño
         boss = Boss.query.filter_by(user_id=current_user.user_id).first()
         if job.boss_id != boss.boss_id:
             flash("No tienes permiso.", "danger")
@@ -398,7 +445,7 @@ def create_app():
 
         if accion == 'aceptar':
             application.status = 'accepted'
-            job.status = 'closed' # <--- CAMBIO: CERRAMOS LA OFERTA
+            job.status = 'closed' 
             flash(f"Candidato aceptado. Ahora aparecerá en sus trabajos pendientes.", "success")
         elif accion == 'rechazar':
             application.status = 'rejected'
@@ -407,9 +454,8 @@ def create_app():
         db.session.commit()
         return redirect(url_for('detallesolicitud', id=job.offer_id))
 
-    # ----------------------
-    # RUTAS WORKER
-    # ----------------------
+    # --- RUTAS DE WORKER ---
+
     @app.route("/perfilw")
     @login_required
     @worker_required
@@ -427,11 +473,35 @@ def create_app():
         }
         return render_template("perfilw.html", worker=worker, worker_obj=worker_obj)
 
+    # NUEVA RUTA: Editar Perfil Worker
+    @app.route("/editar_perfil_worker", methods=["GET", "POST"])
+    @login_required
+    @worker_required
+    def editar_perfil_worker():
+        worker = Employee.query.filter_by(user_id=current_user.user_id).first()
+        
+        if request.method == "POST":
+            worker.name = request.form.get("nombre")
+            worker.skills = request.form.get("profesion")
+            worker.experience = request.form.get("experiencia")
+            
+            # Actualizamos también el nombre en la tabla User
+            current_user.name = request.form.get("nombre")
+            
+            try:
+                db.session.commit()
+                flash("Perfil actualizado correctamente.", "success")
+                return redirect(url_for("perfilw"))
+            except Exception:
+                db.session.rollback()
+                flash("Error al actualizar el perfil.", "danger")
+
+        return render_template("editarperfilw.html", worker=worker)
+
     @app.route("/proyectow")
     @login_required
     @worker_required
     def proyectow():
-        # La oferta ya no aparecerá aquí si el status es 'closed' (al aceptar un candidato)
         proyectos_q = JobOffer.query.filter_by(status="open").order_by(JobOffer.publish_date.desc()).all()
         proyectos = []
         for p in proyectos_q:
@@ -443,14 +513,10 @@ def create_app():
             })
         return render_template("proyectow.html", proyectos=proyectos)
 
-    # ----------------------
-    # SOLICITUDES (WORKER / BOSS)
-    # ----------------------
     @app.route("/solicitudes", methods=["GET", "POST"])
     @login_required
     def solicitudes():
         if request.method == "GET":
-            # WORKER: Ve sus postulaciones
             if current_user.user_type == "employee":
                 worker = Employee.query.filter_by(user_id=current_user.user_id).first()
                 if not worker: return redirect(url_for("index"))
@@ -467,7 +533,6 @@ def create_app():
                         "fecha_limite": job.publish_date.strftime('%Y-%m-%d') if job else "N/A",
                         "estado": a.status
                     })
-                # Renderiza template azul para worker
                 return render_template("solicitudes.html", trabajos=trabajos, is_boss=False)
             
             # BOSS: Ve postulaciones recibidas
@@ -487,10 +552,8 @@ def create_app():
                             "estado": a.status,
                             "fecha": a.application_date.strftime('%Y-%m-%d')
                         })
-                # IMPORTANTE: Renderizamos el template NARANJA para Boss
                 return render_template("solicitudes.html", postulaciones=postulaciones, is_boss=True)
 
-        # POST: Worker se postula
         proyecto_id = request.form.get("proyecto_id")
         if not proyecto_id:
             return redirect(url_for("proyectow"))
@@ -509,7 +572,6 @@ def create_app():
             flash("Proyecto no disponible.", "warning")
             return redirect(url_for("proyectow"))
         
-        # Evitar duplicados
         existe = Application.query.filter_by(employee_id=worker.employee_id, offer_id=job.offer_id).first()
         if existe:
             flash("Ya te has postulado a este proyecto.", "info")
@@ -521,9 +583,6 @@ def create_app():
         flash("Postulación enviada.", "success")
         return redirect(url_for("proyectow"))
 
-    # ----------------------
-    # TRABAJOS PENDIENTES (WORKER) - ¡ACTUALIZADO!
-    # ----------------------
     @app.route("/trabajospendientes")
     @login_required
     @worker_required
@@ -532,7 +591,6 @@ def create_app():
         if not worker:
             return redirect(url_for("index"))
         
-        # Filtra 'accepted' Y 'completed'
         apps = Application.query.filter(
             Application.employee_id == worker.employee_id,
             Application.status.in_(['accepted', 'completed'])
@@ -553,7 +611,6 @@ def create_app():
                 "estado": a.status
             }
             
-            # Separa en dos listas
             if a.status == 'accepted':
                 pendientes.append(info)
             elif a.status == 'completed':
@@ -561,9 +618,6 @@ def create_app():
 
         return render_template("trabajospendientes.html", pendientes=pendientes, completados=completados)
 
-    # ----------------------
-    # DETALLES TRABAJO WORKER
-    # ----------------------
     @app.route("/ver_trabajopendiente", methods=["POST"])
     @login_required
     def ver_trabajopendiente():
@@ -588,9 +642,6 @@ def create_app():
         }
         return render_template("ver_trabajopendiente.html", trabajo=trabajo_detalle)
 
-    # ----------------------
-    # MARCAR COMPLETADO
-    # ----------------------
     @app.route("/marcar_completado", methods=["POST"])
     @login_required
     def marcar_completado():
@@ -603,9 +654,6 @@ def create_app():
         flash("Trabajo marcado como completado.", "success")
         return redirect(url_for("trabajospendientes"))
 
-    # ----------------------
-    # CLI
-    # ----------------------
     @app.cli.command("init-db")
     def init_db():
         db.create_all()
@@ -613,14 +661,7 @@ def create_app():
 
     return app
 
-# ==========================================
-# IMPORTANTE: ESTO VA AFUERA DEL IF
-# ==========================================
-app = create_app()  # <--- Así Gunicorn puede encontrarla
+app = create_app()
 
 if __name__ == "__main__":
-
     app.run(debug=True)
-
-    app.run(debug=True)
-

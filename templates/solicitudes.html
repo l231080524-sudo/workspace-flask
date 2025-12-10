@@ -1,206 +1,314 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mis Solicitudes | WORKSPACE</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Solicitudes | WORKSPACE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    
-    body { background: #f0f4f8; color: #1e293b; }
+    <style>
+        :root {
+            /* Colores por defecto (Worker - Azul) */
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+            
+            /* Estados */
+            --status-pending-bg: #fff7ed;
+            --status-pending-text: #c2410c;
+            --status-accepted-bg: #dcfce7;
+            --status-accepted-text: #166534;
+            --status-rejected-bg: #fef2f2;
+            --status-rejected-text: #991b1b;
+        }
 
-    /* NAVBAR WORKER (Azul) */
-    nav {
-      background: #ffffff;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      border-bottom: 3px solid #2563eb;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .nav-brand { color: #2563eb; font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -1px; }
-    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-menu a { color: #64748b; text-decoration: none; font-weight: 500; transition: 0.3s; }
-    .nav-menu a:hover { color: #2563eb; }
-    .btn-logout { background: #ef4444; color: white !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; transition: 0.3s; }
-    .btn-logout:hover { background: #dc2626; }
+        /* Tema Boss (Sobreescribe variables a Naranja si tiene la clase) */
+        .theme-boss {
+            --primary: #ff7b00;
+            --primary-light: #fff7ed;
+        }
 
-    /* CONTENEDOR */
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-    .page-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .page-header h1 {
-      font-size: 2.2rem;
-      color: #1e293b;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-    .page-header p {
-      color: #64748b;
-      font-size: 1.1rem;
-    }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
 
-    /* LISTA DE SOLICITUDES */
-    .requests-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
+        /* --- NAVBAR --- */
+        nav {
+            background: var(--white);
+            padding: 0 20px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
 
-    .request-card {
-      background: white;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: transform 0.2s;
-      border-left: 5px solid transparent;
-    }
+        .nav-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .brand-icon {
+            background: var(--primary);
+            color: white;
+            padding: 5px;
+            border-radius: 6px;
+            display: flex;
+        }
 
-    .request-card:hover {
-      transform: translateX(5px);
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-    }
+        .nav-menu { list-style: none; display: flex; gap: 25px; align-items: center; }
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary); }
 
-    .request-info h3 {
-      font-size: 1.3rem;
-      color: #1e293b;
-      margin-bottom: 5px;
-      font-weight: 600;
-    }
-    
-    .request-info p {
-      color: #64748b;
-      font-size: 0.95rem;
-      margin-bottom: 4px;
-    }
-    .request-info strong { color: #334155; }
+        .btn-logout {
+            color: #ef4444 !important;
+            font-weight: 600;
+        }
+        .btn-logout:hover { color: #dc2626 !important; }
 
-    /* BADGES DE ESTADO */
-    .status-badge {
-      padding: 8px 16px;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+        .mobile-btn { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-gray); }
 
-    /* Colores de estado */
-    .status-pending { background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; }
-    .status-accepted { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
-    .status-rejected { background: #fef2f2; color: #b91c1c; border: 1px solid #fee2e2; }
+        /* --- CONTENEDOR --- */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    /* Bordes de tarjeta según estado */
-    .card-pending { border-left-color: #f97316; }
-    .card-accepted { border-left-color: #22c55e; }
-    .card-rejected { border-left-color: #ef4444; }
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .page-header h1 { font-size: 2rem; color: var(--text-dark); margin-bottom: 5px; }
+        .page-header p { color: var(--text-gray); font-size: 1.1rem; }
 
-    /* EMPTY STATE */
-    .empty-state {
-      text-align: center;
-      padding: 60px;
-      background: white;
-      border-radius: 20px;
-      color: #94a3b8;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    }
-    .empty-icon { font-size: 4rem; display: block; margin-bottom: 15px; opacity: 0.5; }
+        /* --- LISTA DE SOLICITUDES --- */
+        .requests-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #94a3b8;
-      font-size: 0.9rem;
-      margin-top: 3rem;
-    }
+        .request-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
 
-    @media (max-width: 600px) {
-      .request-card { flex-direction: column; align-items: flex-start; gap: 15px; }
-      .status-badge { align-self: flex-start; }
-    }
-  </style>
+        .request-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-color: var(--primary-light);
+        }
+
+        /* Borde indicador de estado */
+        .request-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0; width: 5px;
+        }
+        .card-pending::before { background-color: #f97316; } /* Naranja */
+        .card-accepted::before { background-color: #22c55e; } /* Verde */
+        .card-rejected::before { background-color: #ef4444; } /* Rojo */
+        .card-completed::before { background-color: #3b82f6; } /* Azul */
+
+        .request-info h3 {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .request-detail {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 2px;
+        }
+        .request-detail strong { color: var(--text-dark); font-weight: 600; }
+
+        /* Badge de Estado */
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .status-pending { background: var(--status-pending-bg); color: var(--status-pending-text); }
+        .status-accepted { background: var(--status-accepted-bg); color: var(--status-accepted-text); }
+        .status-rejected { background: var(--status-rejected-bg); color: var(--status-rejected-text); }
+        .status-completed { background: #eff6ff; color: #1d4ed8; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--white);
+            border-radius: 20px;
+            border: 2px dashed #e2e8f0;
+            color: var(--text-gray);
+        }
+        .empty-icon { width: 60px; height: 60px; color: #cbd5e1; margin-bottom: 20px; }
+        .btn-empty {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .btn-empty:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .request-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .status-badge { align-self: flex-start; }
+            .nav-menu { display: none; }
+            .mobile-btn { display: block; }
+        }
+    </style>
 </head>
-<body>
+<!-- AQUI aplicamos la clase 'theme-boss' dinámicamente si es Boss -->
+<body class="{{ 'theme-boss' if is_boss else '' }}">
 
-  <nav>
-    <a href="{{ url_for('perfilw') }}" class="nav-brand">WORKSPACE.</a>
-    <ul class="nav-menu">
-      <li><a href="{{ url_for('perfilw') }}">Mi Perfil</a></li>
-      <li><a href="{{ url_for('proyectow') }}">Buscar Proyectos</a></li>
-      <li><a href="{{ url_for('trabajospendientes') }}">Trabajos Pendientes</a></li>
-      <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a></li>
-    </ul>
-  </nav>
+    <!-- NAVBAR -->
+    <nav>
+        <a href="{{ url_for('perfilb' if is_boss else 'perfilw') }}" class="nav-brand">
+            <div class="brand-icon"><i data-lucide="briefcase"></i></div>
+            <span>WORKSPACE.</span>
+        </a>
 
-  <div class="container">
-    
-    <div class="page-header">
-      <h1>Mis Postulaciones</h1>
-      <p>Historial de los proyectos a los que has aplicado.</p>
+        <ul class="nav-menu">
+            {% if is_boss %}
+                <li><a href="{{ url_for('perfilb') }}"><i data-lucide="home" style="width: 18px;"></i> Inicio</a></li>
+                <li><a href="{{ url_for('proyectob') }}"><i data-lucide="folder-open" style="width: 18px;"></i> Proyectos</a></li>
+            {% else %}
+                <li><a href="{{ url_for('perfilw') }}"><i data-lucide="user" style="width: 18px;"></i> Mi Perfil</a></li>
+                <li><a href="{{ url_for('proyectow') }}"><i data-lucide="search" style="width: 18px;"></i> Buscar</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('logout') }}" class="btn-logout"><i data-lucide="log-out" style="width: 18px;"></i> Salir</a></li>
+        </ul>
+
+        <button class="mobile-btn"><i data-lucide="menu"></i></button>
+    </nav>
+
+    <div class="container">
+        
+        <div class="page-header">
+            {% if is_boss %}
+                <h1>Solicitudes Recibidas</h1>
+                <p>Historial de todas las postulaciones a tus proyectos.</p>
+            {% else %}
+                <h1>Mis Postulaciones</h1>
+                <p>Estado de los proyectos a los que has aplicado.</p>
+            {% endif %}
+        </div>
+
+        {% set items = postulaciones if is_boss else trabajos %}
+
+        {% if items %}
+            <div class="requests-list">
+                {% for t in items %}
+                    <!-- Tarjeta -->
+                    <div class="request-card card-{{ t.estado }}">
+                        
+                        <div class="request-info">
+                            <h3>{{ t.titulo if not is_boss else t.proyecto }}</h3>
+                            
+                            {% if is_boss %}
+                                <div class="request-detail">
+                                    <i data-lucide="user" style="width: 16px;"></i> Candidato: <strong>{{ t.worker }}</strong>
+                                </div>
+                            {% else %}
+                                <div class="request-detail">
+                                    <i data-lucide="briefcase" style="width: 16px;"></i> Cliente: <strong>{{ t.cliente }}</strong>
+                                </div>
+                            {% endif %}
+
+                            <div class="request-detail">
+                                <i data-lucide="calendar" style="width: 16px;"></i> Fecha: {{ t.fecha_limite or t.fecha }}
+                            </div>
+                        </div>
+
+                        <!-- Badge -->
+                        <span class="status-badge status-{{ t.estado }}">
+                            {% if t.estado == 'pending' %}
+                                <i data-lucide="clock" style="width: 16px;"></i> Pendiente
+                            {% elif t.estado == 'accepted' %}
+                                <i data-lucide="check-circle" style="width: 16px;"></i> Aceptada
+                            {% elif t.estado == 'rejected' %}
+                                <i data-lucide="x-circle" style="width: 16px;"></i> Rechazada
+                            {% elif t.estado == 'completed' %}
+                                <i data-lucide="award" style="width: 16px;"></i> Completada
+                            {% else %}
+                                {{ t.estado }}
+                            {% endif %}
+                        </span>
+
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Estado Vacío -->
+            <div class="empty-state">
+                <i data-lucide="clipboard-list" class="empty-icon"></i>
+                {% if is_boss %}
+                    <h3>Aún no has recibido solicitudes</h3>
+                    <p>Publica más proyectos o espera a que lleguen candidatos.</p>
+                    <a href="{{ url_for('crearproyecto') }}" class="btn-empty">Crear Proyecto →</a>
+                {% else %}
+                    <h3>No has enviado ninguna postulación</h3>
+                    <p>Busca un proyecto que te interese y aplica hoy mismo.</p>
+                    <a href="{{ url_for('proyectow') }}" class="btn-empty">Ir a Buscar Proyectos →</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
     </div>
 
-    {% if trabajos %}
-      <div class="requests-list">
-        {% for t in trabajos %}
-          <!-- Clase dinámica para el color del borde: card-pending, card-accepted, etc. -->
-          <div class="request-card card-{{ t.estado }}">
-            
-            <div class="request-info">
-              <h3>{{ t.titulo }}</h3>
-              <p>Cliente: <strong>{{ t.cliente }}</strong></p>
-              <p>Fecha límite: {{ t.fecha_limite }}</p>
-            </div>
-
-            <!-- Badge de estado con lógica de texto -->
-            <span class="status-badge status-{{ t.estado }}">
-              {% if t.estado == 'pending' %}
-                ⏳ Pendiente
-              {% elif t.estado == 'accepted' %}
-                ✅ ¡Aceptada!
-              {% elif t.estado == 'rejected' %}
-                ❌ No seleccionada
-              {% else %}
-                {{ t.estado }}
-              {% endif %}
-            </span>
-
-          </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="empty-state">
-        <span class="empty-icon">📝</span>
-        <h3>No has enviado ninguna postulación aún.</h3>
-        <p>Busca un proyecto que te interese y aplica hoy mismo.</p>
-        <a href="{{ url_for('proyectow') }}" style="color: #2563eb; font-weight: 600; text-decoration: none; margin-top: 15px; display: inline-block;">Ir a Buscar Proyectos →</a>
-      </div>
-    {% endif %}
-
-  </div>
-
-  <footer>
-    <p>© 2025 WORKSPACE - Worker Dashboard.</p>
-  </footer>
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 </html>
